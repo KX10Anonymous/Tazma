@@ -1,13 +1,13 @@
 package com.janonimo.tazma.rest.auth;
 
 
-import com.manga.janon.token.Token;
-import com.manga.janon.token.TokenRepository;
-import com.manga.janon.token.TokenType;
-import com.manga.janon.user.User;
-import com.manga.janon.user.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.janonimo.tazma.rest.config.JwtService;
+import com.janonimo.tazma.token.Token;
+import com.janonimo.tazma.token.TokenRepository;
+import com.janonimo.tazma.token.TokenType;
+import com.janonimo.tazma.user.User;
+import com.janonimo.tazma.user.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

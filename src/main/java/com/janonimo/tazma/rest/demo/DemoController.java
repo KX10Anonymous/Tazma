@@ -1,4 +1,4 @@
-package com.manga.janon.rest.demo;
+package com.janonimo.tazma.rest.demo;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.ResponseEntity;

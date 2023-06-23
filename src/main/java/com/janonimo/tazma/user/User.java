@@ -1,5 +1,6 @@
-package com.manga.janon.user;
+package com.janonimo.tazma.user;
 
+import com.janonimo.tazma.core.appointment.Appointment;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -27,24 +28,30 @@ public class User implements UserDetails{
     
     @Id
     @GeneratedValue
-    public Integer Id;
+    private Integer Id;
     
-    public String firstname;
+    private String firstname;
     
-    public String lastname;
+    @Column(unique=true)
+    private String phone;
+    
+    private String lastname;
 
     @Column(unique=true)
-    public String email;
+    private String email;
     
-    public String password;
+    private String password;
 
     @Enumerated(EnumType.STRING)
-    public Role role;
+    private Role role;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
+    @OneToMany(mappedBy="user",fetch = FetchType.LAZY)
+    private Collection<Appointment>appointments;
+    
     @Override
     public String getUsername() {
         return email;

@@ -1,4 +1,4 @@
-package com.manga.janon.token;
+package com.janonimo.tazma.token;
 
 public enum TokenType {
     BEARER

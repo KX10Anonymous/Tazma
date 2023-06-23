@@ -1,6 +1,7 @@
-package com.manga.janon.token;
+package com.janonimo.tazma.token;
 
-import com.manga.janon.user.User;
+
+import com.janonimo.tazma.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -29,6 +30,8 @@ public class Token {
     @Column(unique = true)
     public String token;
 
+  
+    @Builder.Default
     @Enumerated(EnumType.STRING)
     public TokenType tokenType = TokenType.BEARER;
 

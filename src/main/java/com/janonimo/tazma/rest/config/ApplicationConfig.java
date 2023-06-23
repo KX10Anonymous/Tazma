@@ -1,7 +1,8 @@
-package com.manga.janon.rest.config;
+package com.janonimo.tazma.rest.config;
 
 
-import com.manga.janon.user.UserRepository;
+
+import com.janonimo.tazma.user.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

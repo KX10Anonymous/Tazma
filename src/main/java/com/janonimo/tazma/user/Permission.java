@@ -1,4 +1,4 @@
-package com.manga.janon.user;
+package com.janonimo.tazma.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### React Native ###
+node_modules/
+ios/
+android/
+!**/tazma-mobile/node_modules/
+!**/tazma-mobile/android/
+!**/tazma-mobile/ios/

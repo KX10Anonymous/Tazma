@@ -16,20 +16,6 @@ import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 
-import static com.manga.janon.user.Permission.ADMIN_CREATE;
-import static com.manga.janon.user.Permission.ADMIN_DELETE;
-import static com.manga.janon.user.Permission.ADMIN_READ;
-import static com.manga.janon.user.Permission.ADMIN_UPDATE;
-import static com.manga.janon.user.Permission.MANAGER_CREATE;
-import static com.manga.janon.user.Permission.MANAGER_DELETE;
-import static com.manga.janon.user.Permission.MANAGER_READ;
-import static com.manga.janon.user.Permission.MANAGER_UPDATE;
-import static com.manga.janon.user.Role.ADMIN;
-import static com.manga.janon.user.Role.MANAGER;
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @EnableWebSecurity

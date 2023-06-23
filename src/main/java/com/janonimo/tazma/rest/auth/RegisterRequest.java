@@ -1,6 +1,6 @@
 package com.janonimo.tazma.rest.auth;
 
-import com.manga.janon.user.Role;
+import com.janonimo.tazma.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

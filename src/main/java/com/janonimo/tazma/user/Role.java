@@ -1,9 +1,9 @@
-package com.manga.janon.user;
+package com.janonimo.tazma.user;
 
 /**
  *
  * @author JANONIMO
  */
 public enum Role {
-    USER, ADMIN,MANAGER, STYLIST, CLIENT
+    ADMIN,MANAGER, STYLIST, CLIENT
 }

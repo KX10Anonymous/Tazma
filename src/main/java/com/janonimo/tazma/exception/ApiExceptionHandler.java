@@ -1,4 +1,4 @@
-package com.manga.janon.exception;
+package com.janonimo.tazma.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

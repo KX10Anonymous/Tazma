@@ -1,4 +1,4 @@
-package com.manga.janon.exception;
+package com.janonimo.tazma.exception;
 
 public class ApiRequestException extends RuntimeException{
     public ApiRequestException(String message){

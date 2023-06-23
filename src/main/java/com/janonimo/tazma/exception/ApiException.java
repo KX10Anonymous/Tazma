@@ -1,4 +1,4 @@
-package com.manga.janon.exception;
+package com.janonimo.tazma.exception;
 
 import lombok.Getter;
 import lombok.Setter;

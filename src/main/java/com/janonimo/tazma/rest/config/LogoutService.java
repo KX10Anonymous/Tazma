@@ -1,7 +1,8 @@
-package com.manga.janon.rest.config;
+package com.janonimo.tazma.rest.config;
 
 
-import com.manga.janon.token.TokenRepository;
+
+import com.janonimo.tazma.token.TokenRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

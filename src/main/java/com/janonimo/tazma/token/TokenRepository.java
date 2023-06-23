@@ -1,4 +1,4 @@
-package com.manga.janon.token;
+package com.janonimo.tazma.token;
 
 import java.util.List;
 import java.util.Optional;

@@ -1,6 +1,6 @@
 package com.janonimo.tazma.rest.config;
 
-import com.manga.janon.token.TokenRepository;
+import com.janonimo.tazma.token.TokenRepository;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
