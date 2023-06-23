@@ -1,7 +1,4 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/SpringFramework/Controller.java to edit this template
- */
+
 package com.janonimo.tazma;
 
 import org.springframework.stereotype.Controller;
