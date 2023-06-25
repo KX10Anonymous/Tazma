@@ -1,7 +1,10 @@
 package com.janonimo.tazma.core.appointment;
 
 import com.janonimo.tazma.user.User;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
@@ -29,25 +32,27 @@ public class Appointment {
     @GeneratedValue
     private Integer Id;
     
-    @OneToOne(mappedBy="appointment", fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
     private User client;
     
-    @OneToOne(mappedBy="appointment", fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "stylist_id")
     private User stylist;
-    
-    @JoinColumn(name="location__id")
-    @OneToOne(fetch = FetchType.EAGER)
-    private Location location;
-    
+     
     private Double clientOffer;
     
     private Double counterOffer;
+    
+    @OneToOne(cascade= CascadeType.ALL)
+    private Location location;
     
     private Double agreedAmount;
     
     @JoinColumn(name="style_id")
     @OneToOne(fetch=FetchType.EAGER)
     private Style style;
+    
+    @Enumerated(EnumType.STRING)
+    private EStatus status;
 }

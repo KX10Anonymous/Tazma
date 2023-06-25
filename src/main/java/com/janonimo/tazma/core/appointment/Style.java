@@ -6,7 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.util.Collection;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,5 +29,5 @@ public class Style {
     private String styleName;
     
     @OneToMany(fetch=FetchType.LAZY)
-    private Collection<Resource> resources;
+    private List<Resource> resources;
 }

@@ -49,7 +49,7 @@ public class User implements UserDetails{
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    @OneToMany(mappedBy="user",fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY)
     private Collection<Appointment>appointments;
     
     @Override
