@@ -1,6 +1,8 @@
 package com.janonimo.tazma.core.appointment.data;
 
 import com.janonimo.tazma.core.appointment.Appointment;
+import com.janonimo.tazma.core.appointment.Location;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,7 +15,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AppointmentService {
     private final AppointmentRepository appointmentRepo;
-    
+    private final LocationService locService;
     /**
      * Get appointment by id
      * @param id
@@ -29,6 +31,13 @@ public class AppointmentService {
      * @return 
      */
     public Appointment create(Appointment appointment){
+        Location loc = appointment.getLocation();
+        if(loc.getId() == null){
+            loc = locService.create(loc);
+            appointment.setLocation(loc);
+        }else{
+            locService.edit(appointment.getLocation());
+        }
         return appointmentRepo.save(appointment);
     }
     

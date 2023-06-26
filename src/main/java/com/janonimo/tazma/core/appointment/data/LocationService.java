@@ -32,6 +32,10 @@ public class LocationService {
     public Location create(Location location){
         return locationRepository.saveAndFlush(location);
     }
+    
+    public Location edit(Location location){
+        return create(location);
+    }
   
     /**
      * Delete location
@@ -41,21 +45,4 @@ public class LocationService {
         locationRepository.delete(location);
     }
     
-    /**
-     * Find active appointments of the stylist around a specific area.
-     * @param name
-     * @return 
-     */
-    public List<Location> findByName(String name){
-        return locationRepository.findByName(name);
-    }
- 
-     /**
-     * Find all appointments of the stylist around a specific area.
-     * @param name
-     * @return 
-     */
-    public List<Location> findAllByName(String name){
-        return locationRepository.findAllByName(name);
-    }
 }
