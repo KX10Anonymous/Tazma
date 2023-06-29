@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class AuthenticationResponse {
 
-    @JsonProperty("access_token")
+    @JsonProperty("jwt")
     private String accessToken;
     @JsonProperty("refresh_token")
     private String refreshToken;

@@ -1,5 +1,6 @@
 package com.janonimo.tazma.rest.auth;
 
+import com.janonimo.tazma.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -13,17 +14,39 @@ import java.io.IOException;
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
 public class AuthenticationController {
 
     private final AuthenticationService service;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-        return ResponseEntity.ok(service.register(request));
+        AuthenticationResponse response = service.register(request);
+        if(response.getAccessToken().isEmpty()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }else{
+            return ResponseEntity.ok(response);
+        }
+        
     }
-    @PostMapping("/authenticate")
+    
+    /**
+     * Used To Send the User Information to the Application
+     * @param jwt
+     * @return 
+     */
+    public ResponseEntity<User> read(@RequestBody String jwt){
+        return new ResponseEntity<>(service.read(jwt), HttpStatus.OK);
+    }
+    
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        return ResponseEntity.ok(service.authenticate(request));
+         AuthenticationResponse response = service.authenticate(request);
+        if(response.getAccessToken().isEmpty()){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }else{
+            return ResponseEntity.ok(response);
+        }
     }
 
     @PostMapping("/refresh-token")

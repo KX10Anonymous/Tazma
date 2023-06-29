@@ -1,5 +1,6 @@
 package com.janonimo.tazma.core.appointment;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.janonimo.tazma.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -30,29 +31,38 @@ import lombok.NoArgsConstructor;
 public class Appointment {
     @Id
     @GeneratedValue
+    @JsonProperty("id")
     private Integer Id;
     
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id")
+    @JsonProperty("client")
     private User client;
     
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "stylist_id")
+    @JsonProperty("stylist")
     private User stylist;
      
+    @JsonProperty("clientOffer")
     private Double clientOffer;
     
+    @JsonProperty("counterOffer")
     private Double counterOffer;
     
     @OneToOne(cascade= CascadeType.ALL)
+    @JsonProperty("location")
     private Location location;
     
+    @JsonProperty("agreedAmount")
     private Double agreedAmount;
     
     @JoinColumn(name="style_id")
     @OneToOne(fetch=FetchType.EAGER)
+    @JsonProperty("style")
     private Style style;
     
     @Enumerated(EnumType.STRING)
+    @JsonProperty("status")
     private EStatus status;
 }

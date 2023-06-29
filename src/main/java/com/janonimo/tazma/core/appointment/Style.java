@@ -1,5 +1,6 @@
 package com.janonimo.tazma.core.appointment;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,10 +25,13 @@ import lombok.NoArgsConstructor;
 public class Style {
     @Id
     @GeneratedValue
+    @JsonProperty("id")
     private Integer Id;
     
+    @JsonProperty("styleName")
     private String styleName;
     
     @OneToMany(fetch=FetchType.LAZY)
+    @JsonProperty("resources")
     private List<Resource> resources;
 }

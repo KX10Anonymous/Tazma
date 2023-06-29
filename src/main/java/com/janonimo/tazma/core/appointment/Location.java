@@ -1,5 +1,6 @@
 package com.janonimo.tazma.core.appointment;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -24,14 +25,19 @@ public class Location {
     
     @Id
     @GeneratedValue
+    @JsonProperty("id")
     private Integer Id;
     
+    @JsonProperty("locationName")
     private String locationName;
     
+    @JsonProperty("longitude")
     private double longitude;
     
+    @JsonProperty("latitude")
     private double latitude;
     
     @OneToOne
+    @JsonProperty("appointment")
     private Appointment appointment;
 }
