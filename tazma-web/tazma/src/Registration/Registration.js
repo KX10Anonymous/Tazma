@@ -21,6 +21,7 @@ const Register = () => {
   const [lastname, setLastName]=  useState("");
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
+  const [currJwt, setCurrJwt] = useState("");
   const [buttonColor1, setButtonColorA] = useState('info');
   const [buttonColor2, setButtonColorB] = useState('info');
 
@@ -51,21 +52,18 @@ const Register = () => {
       role: role,
     };
 
-    fetch("http://localhost:8080/api/auth/register", {
+    fetch("http://localhost:8080/tazma/api/auth/register", {
       headers: {
         "Content-Type": "application/json",
       },
       method: "post",
       body: JSON.stringify(reqBody),
     })
-      .then((response) => {
-        if (response.status === 200)
-          return Promise.all([response.json(), response.headers]);
-        else return Promise.reject("Invalid login attempt");
-      })
-      .then(([body, headers]) => {
-        user.setJwt(body.get("jwt"));
-      })
+      .then((response) => response.json().then(
+        (data) => {
+          user.setJwt(data.jwt);
+        }
+      ))
       .catch((message) => {
         alert(message);
       });

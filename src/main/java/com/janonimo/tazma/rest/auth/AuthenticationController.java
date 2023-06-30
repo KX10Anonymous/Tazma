@@ -31,11 +31,11 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        AuthenticationResponse response = service.authenticate(request);
-        if (response.getAccessToken().isEmpty()) {
+        AuthenticationResponse registration = service.authenticate(request);
+        if (registration.getAccessToken().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } else {
-            return ResponseEntity.ok(response);
+            return ResponseEntity.ok(registration);
         }
     }
 
