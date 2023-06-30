@@ -8,15 +8,10 @@ import com.janonimo.tazma.user.Role;
 import com.janonimo.tazma.user.User;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  *
@@ -51,30 +46,24 @@ public class AppointmentController {
 
     /**
      *
-     * @param appointment
-     * @return
      */
     @PostMapping("/edit")
     public ResponseEntity<Appointment> edit(@RequestBody Appointment appointment) {
         return new ResponseEntity<>(appointmentService.edit(appointment), HttpStatus.OK);
     }
 
-    @PostMapping("/delete")
-    public ResponseEntity<?> delete(Integer id) {
+    @PostMapping("/delete/{id}")
+    public ResponseEntity<?> delete(@PathVariable Integer id) {
         appointmentService.delete(id);
         return ResponseEntity.ok("Appointement Deleted");
     }
 
-    @GetMapping("/read")
-    public ResponseEntity<Appointment> read(Integer id) {
+    @GetMapping("/read/{id}")
+    public ResponseEntity<Appointment> read(@PathVariable  Integer id) {
         return new ResponseEntity<>(appointmentService.find(id), HttpStatus.OK);
     }
 
-    /**
-     *
-     * @param name
-     * @return
-     */
+
     @GetMapping("/searcha")
     public ResponseEntity<List<Appointment>> searchActive(@RequestBody String name){
         

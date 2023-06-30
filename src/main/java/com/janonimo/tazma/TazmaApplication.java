@@ -8,7 +8,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
 public class TazmaApplication extends SpringBootServletInitializer{
 
 	public static void main(String[] args) {
-                System.setProperty("server.servlet.context-path", "/tazma");
+		System.setProperty("server.servlet.context-path", "/tazma");
 		SpringApplication.run(TazmaApplication.class, args);
 	}
 

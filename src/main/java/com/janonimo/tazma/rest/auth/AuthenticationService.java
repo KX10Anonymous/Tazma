@@ -20,6 +20,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.Objects;
+
 import org.springframework.security.authentication.BadCredentialsException;
 
 @Service
@@ -61,10 +63,23 @@ public class AuthenticationService {
     }
     
     public User read(String tokenStr){
-        Token token = tokenRepository.findByToken(tokenStr).get();
-        User user = repository.findById(token.user.getId()).get();
-        user.setPassword("");
-        return user;
+        try{
+            if(tokenRepository.findByToken(tokenStr).isPresent()){
+                Token token = Objects.requireNonNull(tokenRepository.findByToken(tokenStr)).get();
+                if(Objects.requireNonNull(repository.findById(token.getUser().getId())).isPresent()){
+                    User user = Objects.requireNonNull(repository.findById(token.user.getId())).get();
+                    user.setPassword("");
+                    return user;
+                }else{
+                    return null;
+                }
+            }else {
+                return null;
+            }
+        }catch(NullPointerException e){
+            return null;
+        }
+
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {

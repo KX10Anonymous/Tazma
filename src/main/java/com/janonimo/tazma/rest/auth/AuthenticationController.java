@@ -3,7 +3,6 @@ package com.janonimo.tazma.rest.auth;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,20 +20,20 @@ public class AuthenticationController {
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
         AuthenticationResponse response = service.register(request);
-        if(response.getAccessToken().isEmpty()){
+        if (response.getAccessToken().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }else{
+        } else {
             return ResponseEntity.ok(response);
         }
-        
+
     }
-    
+
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-         AuthenticationResponse response = service.authenticate(request);
-        if(response.getAccessToken().isEmpty()){
+        AuthenticationResponse response = service.authenticate(request);
+        if (response.getAccessToken().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }else{
+        } else {
             return ResponseEntity.ok(response);
         }
     }
@@ -47,10 +46,5 @@ public class AuthenticationController {
         service.refreshToken(request, response);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
-        String errorMessage = "Email already exists.";
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorMessage);
-    }
 
 }

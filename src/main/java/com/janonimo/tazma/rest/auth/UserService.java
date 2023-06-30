@@ -18,22 +18,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
     private final UserRepository repository;
     private final AuthenticationService authService;
-    
-    /**
-     * Return The list of Stylists by their location.
-     * @param jwt
-     * @return 
-     */
     public List<User> findByAddress(String jwt){
         User user = authService.read(jwt);
         return repository.findByAddress(user.getAddress(), user.getProvince());
     }
-    
-    /**
-     * Return user where the status is available and the user is stylist
-     * @param jwt
-     * @return 
-     */
+
     public List<User> findByStatus(String jwt){
         ArrayList<User> users = new ArrayList<>();
         for(User u : findByAddress(jwt)){
