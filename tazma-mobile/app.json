@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "janon-mobile",
+    "slug": "janon-mobile",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "janon-mobile"
+}
