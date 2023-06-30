@@ -50,6 +50,17 @@ public class User implements UserDetails{
     @JsonProperty("password")
     private String password;
 
+    @JsonProperty("province")
+    private String province;
+    
+    @JsonProperty("address")
+    private String address;
+    
+    @Nullable
+    @JsonProperty("status")
+    @Enumerated(EnumType.STRING)
+    private StylistStatus status;
+    
     @Nullable
     @Enumerated(EnumType.STRING)
     @JsonProperty("role")

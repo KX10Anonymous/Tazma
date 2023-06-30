@@ -1,7 +1,6 @@
 package com.janonimo.tazma.core.services;
 
 import com.janonimo.tazma.core.appointment.Location;
-import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

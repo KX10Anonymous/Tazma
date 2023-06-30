@@ -1,6 +1,5 @@
 package com.janonimo.tazma.rest.auth;
 
-import com.janonimo.tazma.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -28,15 +27,6 @@ public class AuthenticationController {
             return ResponseEntity.ok(response);
         }
         
-    }
-    
-    /**
-     * Used To Send the User Information to the Application
-     * @param jwt
-     * @return 
-     */
-    public ResponseEntity<User> read(@RequestBody String jwt){
-        return new ResponseEntity<>(service.read(jwt), HttpStatus.OK);
     }
     
     @PostMapping("/login")

@@ -6,13 +6,13 @@ import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.Role;
 import com.janonimo.tazma.user.User;
-import com.janonimo.tazma.user.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/appointments")
 @RequiredArgsConstructor
 @PreAuthorize("hasRole({'CLIENT', 'STYLIST'})")
+@CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
 public class AppointmentController {
 
     private final AppointmentService appointmentService;
