@@ -47,15 +47,15 @@ public class AppointmentController {
     /**
      *
      */
-    @PostMapping("/edit")
+    @PutMapping("/edit")
     public ResponseEntity<Appointment> edit(@RequestBody Appointment appointment) {
         return new ResponseEntity<>(appointmentService.edit(appointment), HttpStatus.OK);
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Integer id) {
         appointmentService.delete(id);
-        return ResponseEntity.ok("Appointement Deleted");
+        return ResponseEntity.ok("Appointment Deleted");
     }
 
     @GetMapping("/read/{id}")
@@ -64,19 +64,15 @@ public class AppointmentController {
     }
 
 
-    @GetMapping("/searcha")
-    public ResponseEntity<List<Appointment>> searchActive(@RequestBody String name){
+    @GetMapping("/searcha/{name}")
+    public ResponseEntity<List<Appointment>> searchActive(@PathVariable String name){
         
         return new ResponseEntity<>(appointmentService.readByName(name), HttpStatus.OK);
     }
     
-     /**
-     *
-     * @param name
-     * @return
-     */
-    @GetMapping("/searchall")
-    public ResponseEntity<List<Appointment>> searchAll(@RequestBody String name){
+
+    @GetMapping("/searchall/{name}")
+    public ResponseEntity<List<Appointment>> searchAll(@PathVariable String name){
         return new ResponseEntity<>(appointmentService.readAllByName(name), HttpStatus.OK);
     }
 }

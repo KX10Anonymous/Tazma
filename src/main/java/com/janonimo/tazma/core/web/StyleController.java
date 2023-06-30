@@ -39,7 +39,7 @@ public class StyleController {
         return new ResponseEntity<>(styleService.edit(style), HttpStatus.OK);
     }
     
-    @PostMapping("/read/{id}")
+    @GetMapping("/read/{id}")
     public ResponseEntity<Style> read(@PathVariable int id){
         return new ResponseEntity<>(styleService.read(id), HttpStatus.OK);
     }

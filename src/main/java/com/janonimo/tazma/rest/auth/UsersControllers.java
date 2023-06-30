@@ -26,17 +26,17 @@ public class UsersControllers {
     /**
      * Used To Send the User Information to the Application
      */
-    @GetMapping("/user")
+    @GetMapping("/user/{jwt}")
     public ResponseEntity<User> read(@PathVariable String jwt){
         return new ResponseEntity<>(authService.read(jwt), HttpStatus.OK);
     }
     
-    @GetMapping("/available")
+    @GetMapping("/available/{jwt}")
     public ResponseEntity<?> availableUsers(@PathVariable String jwt){
         return new ResponseEntity<>(userService.findByStatus(jwt), HttpStatus.OK);
     }
     
-     @GetMapping("/location")
+     @GetMapping("/location/{jwt}")
     public ResponseEntity<?> usersByLocation(@PathVariable String jwt){
         return new ResponseEntity<>(userService.findByAddress(jwt), HttpStatus.OK);
     }

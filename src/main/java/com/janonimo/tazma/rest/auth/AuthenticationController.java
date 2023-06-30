@@ -1,5 +1,6 @@
 package com.janonimo.tazma.rest.auth;
 
+import com.janonimo.tazma.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
