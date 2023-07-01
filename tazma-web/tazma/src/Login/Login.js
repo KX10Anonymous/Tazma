@@ -16,10 +16,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState(null);
 
-  // useEffect(() => {
-  //   if (user.jwt) navigate("/dashboard");
-  // }, [user]);
-
+ 
   function sendLoginRequest() {
     setErrorMsg("");
     const reqBody = {
@@ -27,30 +24,23 @@ const Login = () => {
       password: password,
     };
 
-    fetch("api/auth/login", {
+    fetch("http://localhost:8080/tazma/api/auth/login", {
       headers: {
         "Content-Type": "application/json",
       },
       method: "post",
       body: JSON.stringify(reqBody),
     })
-      .then((response) => {
-        if (response.status === 200) return response.text();
-        else if (response.status === 401 || response.status === 403) {
-          setErrorMsg("Invalid username or password");
-        } else {
-          setErrorMsg(
-            "Something went wrong, try again later or reach out to trevor@coderscampus.com"
-          );
-        }
-      })
-      .then((data) => {
-        if (data) {
-          user.setJwt(data);
-          navigate("/dashboard");
-        }
-      });
-  }
+    .then((response) => response.json().then(
+      (data) => {
+         // Store the JWT in local storage
+        localStorage.setItem('jwt', data.jwt);
+        user.setJwt(data.jwt);
+        navigate("/home");
+      }
+    ))
+      };
+  
   return (
     <>
     <MDBContainer fluid className='d-flex align-items-center justify-content-center bg-image' style={{backgroundImage: 'url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp)'}}>

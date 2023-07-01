@@ -22,6 +22,7 @@ function NavBar() {
   const [showNavNoTogglerThird, setShowNavNoTogglerThird] = useState(false);
 
   useEffect(() => {
+    user.setJwt(localStorage.getItem("jwt"));
     if (user && user.jwt) {
       const decodedJwt = jwt_decode(user.jwt);
       setAuthorities(decodedJwt.authorities);

@@ -93,7 +93,7 @@ const Register = () => {
               <MDBBtn style={{ width: '150px', height: '40px' }} onClick={handleClickA} color={buttonColor1} value="CLIENT" name="options" id="role">
                 Client
               </MDBBtn>
-              <MDBBtn style={{ width: '150px', height: '40px' }} color={buttonColor2} onClick={handleClickB}   value="Sylist" name="options" id="role">
+              <MDBBtn style={{ width: '150px', height: '40px' }} color={buttonColor2} onClick={handleClickB}   value="STYLIST" name="options" id="role">
                 Stylist
               </MDBBtn>
               
