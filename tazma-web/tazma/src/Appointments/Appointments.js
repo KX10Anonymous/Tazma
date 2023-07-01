@@ -1,141 +1,98 @@
 import {
-  MDBBadge,
   MDBBtn,
   MDBCard,
   MDBCardBody,
-  MDBCardFooter,
+  MDBCardImage,
+  MDBCardText,
+  MDBCardTitle,
   MDBCol,
-  MDBIcon,
   MDBRow
 } from 'mdb-react-ui-kit';
 import React from 'react';
 
 export default function Appointments() {
   return (
-    <MDBRow>
-      <MDBCol xl={6} className='mb-4'>
-        <MDBCard>
+    <MDBRow className="justify-content-center">
+      <MDBCol className='mb-4'>
+        <MDBCard style={{ maxWidth: '22rem' }} aria-hidden='true'>
+          <MDBCardImage
+            src='https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp'
+            position='top'
+            alt='Sunset Over the Sea'
+          />
           <MDBCardBody>
-            <div className='d-flex justify-content-between align-items-center'>
-              <div className='d-flex align-items-center'>
-                <img
-                  src='https://mdbootstrap.com/img/new/avatars/8.jpg'
-                  alt=''
-                  style={{ width: '45px', height: '45px' }}
-                  className='rounded-circle'
-                />
-                <div className='ms-3'>
-                  <p className='fw-bold mb-1'>John Doe</p>
-                  <p className='text-muted mb-0'>john.doe@gmail.com</p>
-                </div>
-              </div>
-              <MDBBadge pill color='success' light>
-                Active
-              </MDBBadge>
-            </div>
-          </MDBCardBody>
-          <MDBCardFooter background='light' border='0' className='p-2 d-flex justify-content-around'>
-            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0'>
-              Message <MDBIcon fas icon='envelope' />
-            </MDBBtn>
-            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0'>
-              Call <MDBIcon fas icon='phone' />
-            </MDBBtn>
-          </MDBCardFooter>
-        </MDBCard>
+          <MDBCardTitle className='placeholder-glow'>
+            <span className='placeholder col-6'></span>
+          </MDBCardTitle>
+          <MDBCardText className='placeholder-glow'>
+            <span className='placeholder col-7'></span>
+            <span className='placeholder col-4'></span>
+            <span className='placeholder col-4'></span>
+            <span className='placeholder col-6'></span>
+            <span className='placeholder col-8'></span>
+          </MDBCardText>
+        <MDBBtn href='#' tabIndex={-1} disabled className='placeholder col-6'></MDBBtn>
+      </MDBCardBody>
+    </MDBCard>
       </MDBCol>
-      <MDBCol xl={6} className='mb-4'>
-        <MDBCard>
+      <MDBCol className='mb-4'>
+        <MDBCard style={{ maxWidth: '22rem' }} aria-hidden='true'>
+          <MDBCardImage
+            src='https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp'
+            position='top'
+            alt='Sunset Over the Sea'
+          />
           <MDBCardBody>
-            <div className='d-flex justify-content-between align-items-center'>
-              <div className='d-flex align-items-center'>
-                <img
-                  src='https://mdbootstrap.com/img/new/avatars/6.jpg'
-                  alt=''
-                  style={{ width: '45px', height: '45px' }}
-                  className='rounded-circle'
-                />
-                <div className='ms-3'>
-                  <p className='fw-bold mb-1'>Alex Ray</p>
-                  <p className='text-muted mb-0'>alex.ray@gmail.com</p>
-                </div>
-              </div>
-              <MDBBadge pill color='primary' light>
-                Onboarding
-              </MDBBadge>
-            </div>
-          </MDBCardBody>
-          <MDBCardFooter background='light' border='0' className='p-2 d-flex justify-content-around'>
-            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0'>
-              Message <MDBIcon fas icon='envelope' />
-            </MDBBtn>
-            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0'>
-              Call <MDBIcon fas icon='phone' />
-            </MDBBtn>
-          </MDBCardFooter>
-        </MDBCard>
+          <MDBCardTitle className='placeholder-glow'>
+            <span className='placeholder col-6'></span>
+          </MDBCardTitle>
+          <MDBCardText className='placeholder-glow'>
+            <span className='placeholder col-7'></span>
+            <span className='placeholder col-4'></span>
+            <span className='placeholder col-4'></span>
+            <span className='placeholder col-6'></span>
+            <span className='placeholder col-8'></span>
+          </MDBCardText>
+        <MDBBtn href='#' tabIndex={-1} disabled className='placeholder col-6'></MDBBtn>
+      </MDBCardBody>
+    </MDBCard>
       </MDBCol>
-      <MDBCol xl={6} className='mb-4'>
-        <MDBCard>
+      <MDBCol className='mb-4'>
+        <MDBCard style={{ maxWidth: '22rem' }} aria-hidden='true'>
+          <MDBCardImage
+            src='../../public/Images/hairdos/afro-skin-fade.webp'
+            position='top'
+            alt='Sunset Over the Sea' 
+          />
           <MDBCardBody>
-            <div className='d-flex justify-content-between align-items-center'>
-              <div className='d-flex align-items-center'>
-                <img
-                  src='https://mdbootstrap.com/img/new/avatars/7.jpg'
-                  alt=''
-                  style={{ width: '45px', height: '45px' }}
-                  className='rounded-circle'
-                />
-                <div className='ms-3'>
-                  <p className='fw-bold mb-1'>Kate Hunington</p>
-                  <p className='text-muted mb-0'>kate.hunington@gmail.com</p>
-                </div>
-              </div>
-              <MDBBadge pill color='warning' light>
-                Awaiting
-              </MDBBadge>
-            </div>
-          </MDBCardBody>
-          <MDBCardFooter background='light' border='0' className='p-2 d-flex justify-content-around'>
-            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0'>
-              Message <MDBIcon fas icon='envelope' />
-            </MDBBtn>
-            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0'>
-              Call <MDBIcon fas icon='phone' />
-            </MDBBtn>
-          </MDBCardFooter>
-        </MDBCard>
+          <MDBCardTitle className='placeholder-glow'>
+            <span className='placeholder col-6'></span>
+          </MDBCardTitle>
+          <MDBCardText className='placeholder-glow'>
+            <span className='placeholder col-7'></span>
+            <span className='placeholder col-4'></span>
+            <span className='placeholder col-4'></span>
+            <span className='placeholder col-6'></span>
+            <span className='placeholder col-8'></span>
+          </MDBCardText>
+        <MDBBtn href='#' tabIndex={-1} disabled className='placeholder col-6'></MDBBtn>
+      </MDBCardBody>
+    </MDBCard>
       </MDBCol>
-      <MDBCol xl={6} className='mb-4'>
-        <MDBCard>
+      <MDBCol className='mb-4'>
+        <MDBCard style={{ maxWidth: '22rem' }} aria-hidden='true'>
+          <MDBCardImage
+            src='https://mdbcdn.b-cdn.net/img/new/standard/nature/182.webp'
+            position='top'
+            alt='Sunset Over the Sea'
+          />
           <MDBCardBody>
-            <div className='d-flex justify-content-between align-items-center'>
-              <div className='d-flex align-items-center'>
-                <img
-                  src='https://mdbootstrap.com/img/new/avatars/3.jpg'
-                  alt=''
-                  style={{ width: '45px', height: '45px' }}
-                  className='rounded-circle'
-                />
-                <div className='ms-3'>
-                  <p className='fw-bold mb-1'>Michael Bale</p>
-                  <p className='text-muted mb-0'>michael.bale@gmail.com</p>
-                </div>
-              </div>
-              <MDBBadge pill color='danger' light>
-                Removed
-              </MDBBadge>
-            </div>
-          </MDBCardBody>
-          <MDBCardFooter background='light' border='0' className='p-2 d-flex justify-content-around'>
-            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0'>
-              Message <MDBIcon fas icon='envelope' />
-            </MDBBtn>
-            <MDBBtn color='link' rippleColor='primary' className='text-reset m-0'>
-              Call <MDBIcon fas icon='phone' />
-            </MDBBtn>
-          </MDBCardFooter>
-        </MDBCard>
+          <MDBCardText className='placeholder-glow'>
+            <span className='placeholder col-7'>Corn Rows</span>
+          </MDBCardText>
+        <MDBBtn href='#' tabIndex={-1} disabled className='placeholder col-12 justify-content-center'>Make Appointment</MDBBtn>
+      </MDBCardBody>
+    </MDBCard>
       </MDBCol>
     </MDBRow>
   );

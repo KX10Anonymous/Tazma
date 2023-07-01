@@ -14,7 +14,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState(null);
+  const [ errMsg, setErrorMsg] = useState(null);
 
  
   function sendLoginRequest() {
@@ -53,7 +53,7 @@ const Login = () => {
                 onChange={(e) => setEmail(e.target.value)} placeholder='Your Email' size='lg' id='email' type='email'/>
           
           
-          <MDBInput wrapperClass='mb-4' placeholder='Password' value={password}
+          <MDBInput wrapperClass='mb-4' label='Password' value={password}
                 onChange={(e) => setPassword(e.target.value)} size='lg' id='password' type='password'/>
           
           <MDBBtn style={{ width: '150px', height: '40px' }} className='mb-4 w-100 gradient-custom-4' size='lg' type="button" onClick={() => {

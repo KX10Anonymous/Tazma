@@ -117,6 +117,14 @@ public class AuthenticationService {
         tokenRepository.save(token);
     }
 
+    public void revokeToken(String tokenStr) {
+        Token token  = tokenRepository.findByToken(tokenStr).get();
+        token.setExpired(true);
+        token.setRevoked(true);
+
+        tokenRepository.save(token);
+    }
+
     private void revokeAllUserTokens(User user) {
         var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
         if (validUserTokens.isEmpty()) {

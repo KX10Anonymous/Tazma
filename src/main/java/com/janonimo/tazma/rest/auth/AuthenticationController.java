@@ -1,6 +1,5 @@
 package com.janonimo.tazma.rest.auth;
 
-import com.janonimo.tazma.user.User;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -47,5 +46,10 @@ public class AuthenticationController {
         service.refreshToken(request, response);
     }
 
+    @GetMapping("/logout{jwt}")
+    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
+    public void logout(@PathVariable("jwt") String jwt){
+        service.revokeToken(jwt);
+    }
 
 }

@@ -1,4 +1,3 @@
-import jwt_decode from "jwt-decode";
 import {
   MDBCollapse,
   MDBContainer,
@@ -11,22 +10,38 @@ import {
   MDBNavbarToggler
 } from 'mdb-react-ui-kit';
 import React, { useEffect, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
 import { useUser } from "../UserProvider";
 
-function NavBar() {
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
+function NavBar() { 
   const user = useUser();
-  const [authorities, setAuthorities] = useState(null);
   const [showNavNoTogglerThird, setShowNavNoTogglerThird] = useState(false);
+
+  const handleLogout = async () => {
+    try {
+      // Send a logout request to the API endpoint
+      
+      const response = await fetch('http://localhost:8080/tazma/api/auth/logout/'+localStorage.getItem('jwt'), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: localStorage.getItem('jwt'),
+        },
+        
+      });
+      console.log(response);
+      // Clear the JWT from local storage
+      localStorage.clear();
+  
+      // Perform any additional cleanup or redirect to the login page
+      // ...
+    } catch (error) {
+      // Handle any network or other errors
+      console.error('Logout request failed:', error);
+    }
+  };
 
   useEffect(() => {
     user.setJwt(localStorage.getItem("jwt"));
-    if (user && user.jwt) {
-      const decodedJwt = jwt_decode(user.jwt);
-      setAuthorities(decodedJwt.authorities);
-    }
   }, [user, user.jwt]);
 
   return (
@@ -69,7 +84,7 @@ function NavBar() {
                     <MDBNavbarLink href='#'>Appointments</MDBNavbarLink>
                   </MDBNavbarItem>
                   <MDBNavbarItem>
-                  <MDBNavbarLink disabled href='#' tabIndex={-1} aria-disabled='true'>
+                  <MDBNavbarLink  onClick={handleLogout} tabIndex={0} aria-disabled='false'>
                     Logout
                   </MDBNavbarLink>
                   </MDBNavbarItem>

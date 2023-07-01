@@ -7,7 +7,7 @@ import {
   MDBContainer,
   MDBInput, MDBRow
 } from 'mdb-react-ui-kit';
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useUser } from "../UserProvider";
@@ -21,7 +21,6 @@ const Register = () => {
   const [lastname, setLastName]=  useState("");
   const [phone, setPhone] = useState("");
   const [role, setRole] = useState("");
-  const [currJwt, setCurrJwt] = useState("");
   const [buttonColor1, setButtonColorA] = useState('info');
   const [buttonColor2, setButtonColorB] = useState('info');
 
@@ -36,11 +35,6 @@ const Register = () => {
     setRole(e.target.value);
     setButtonColorB('success');
   };
-
-
-  useEffect(() => {
-    if (user.jwt) navigate("/home");
-  }, [navigate, user]);
 
   function createAndLoginUser() {
     const reqBody = {

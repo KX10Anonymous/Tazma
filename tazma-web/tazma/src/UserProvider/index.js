@@ -1,9 +1,8 @@
-import Cookies from "js-cookie";
 import React, { createContext, useContext, useState } from "react";
 const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [jwt, setJwt] = useState(Cookies.get("jwt"));
+  const [jwt, setJwt] = useState("");
 
   const value = { jwt, setJwt };
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
