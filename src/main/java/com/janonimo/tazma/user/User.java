@@ -35,7 +35,7 @@ public class User implements UserDetails{
     
     @JsonProperty("firstname")
     private String firstname;
-    
+
     @Column(unique=true)
     @JsonProperty("phone")
     private String phone;
@@ -60,7 +60,12 @@ public class User implements UserDetails{
     @JsonProperty("status")
     @Enumerated(EnumType.STRING)
     private StylistStatus status;
-    
+
+    @Enumerated(EnumType.STRING)
+    @JsonProperty("gender")
+    @Nullable
+    private Gender gender;
+
     @Nullable
     @Enumerated(EnumType.STRING)
     @JsonProperty("role")

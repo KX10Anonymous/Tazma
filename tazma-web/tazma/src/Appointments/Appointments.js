@@ -60,9 +60,9 @@ export default function Appointments() {
       <MDBCol className='mb-4'>
         <MDBCard style={{ maxWidth: '22rem' }} aria-hidden='true'>
           <MDBCardImage
-            src='../../public/Images/hairdos/afro-skin-fade.webp'
+            src='require(@../../public/Images/hairdos/afro-skin-fade.webp)'
             position='top'
-            alt='Sunset Over the Sea' 
+            alt='Sunset Over the Sea'  hover
           />
           <MDBCardBody>
           <MDBCardTitle className='placeholder-glow'>

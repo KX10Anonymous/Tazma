@@ -17,27 +17,27 @@ function NavBar() {
   const [showNavNoTogglerThird, setShowNavNoTogglerThird] = useState(false);
 
   const handleLogout = async () => {
-    try {
+   // try {
       // Send a logout request to the API endpoint
       
-      const response = await fetch('http://localhost:8080/tazma/api/auth/logout/'+localStorage.getItem('jwt'), {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: localStorage.getItem('jwt'),
-        },
+      //const response = await fetch('http://localhost:8080/tazma/api/auth/logout/'+localStorage.getItem('jwt'), {
+        //method: 'GET',
+        //headers: {
+          //'Content-Type': 'application/json',
+          //Authorization: localStorage.getItem('jwt'),
+        //},
         
-      });
-      console.log(response);
+      //});
+      //console.log(response);
       // Clear the JWT from local storage
       localStorage.clear();
-  
+      user.setJwt("");
       // Perform any additional cleanup or redirect to the login page
       // ...
-    } catch (error) {
+    //} catch (error) {
       // Handle any network or other errors
-      console.error('Logout request failed:', error);
-    }
+      //console.error('Logout request failed:', error);
+    //}
   };
 
   useEffect(() => {

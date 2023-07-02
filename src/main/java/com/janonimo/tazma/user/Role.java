@@ -5,7 +5,7 @@ package com.janonimo.tazma.user;
  * @author JANONIMO
  */
 public enum Role {
-    ADMIN, MANAGER, STYLIST, CLIENT;
+    ADMIN, STYLIST, CLIENT;
 
     public static Role fromString(String value) {
         Role r = null;

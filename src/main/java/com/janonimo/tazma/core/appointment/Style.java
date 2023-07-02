@@ -1,12 +1,9 @@
 package com.janonimo.tazma.core.appointment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.janonimo.tazma.user.Gender;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -30,7 +27,10 @@ public class Style {
     
     @JsonProperty("styleName")
     private String styleName;
-    
+
+    @JsonProperty("gender")
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     @OneToMany(fetch=FetchType.LAZY)
     @JsonProperty("resources")
     private List<Resource> resources;
