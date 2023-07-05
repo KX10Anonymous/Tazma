@@ -13,12 +13,11 @@ import org.springframework.web.multipart.MultipartFile;
 public interface ResourceRepository extends JpaRepository<Resource, Integer> {
      @Query(value = """
       select r from Resource r inner join Style t\s
-      on r.style.id = t.id\s
-      where t.id = :id
+      on r.style.Id = t.Id\s
+      where t.Id = :id
       """)
     List<Resource> findAllResourcesByStyle(Integer id);
-    
-    Resource save(MultipartFile file);
+
     
     
 }

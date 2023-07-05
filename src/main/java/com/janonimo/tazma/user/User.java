@@ -2,6 +2,8 @@ package com.janonimo.tazma.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.janonimo.tazma.core.appointment.Appointment;
+import com.janonimo.tazma.core.appointment.AppointmentType;
+import com.janonimo.tazma.core.reporting.Post;
 import jakarta.persistence.*;
 
 import java.util.Collection;
@@ -31,7 +33,7 @@ public class User implements UserDetails{
     @Id
     @GeneratedValue
     @JsonProperty("id")
-    private Integer Id;
+    private Long Id;
     
     @JsonProperty("firstname")
     private String firstname;
@@ -50,17 +52,20 @@ public class User implements UserDetails{
     @JsonProperty("password")
     private String password;
 
-    @JsonProperty("province")
-    private String province;
-    
     @JsonProperty("address")
-    private String address;
-    
+    @OneToOne
+    private Address address;
+    @OneToMany
+    private List<Post> posts;
     @Nullable
     @JsonProperty("status")
     @Enumerated(EnumType.STRING)
     private StylistStatus status;
 
+    @Nullable
+    @JsonProperty("appointmentType")
+    @Enumerated(EnumType.STRING)
+    private AppointmentType appointmentType;
     @Enumerated(EnumType.STRING)
     @JsonProperty("gender")
     @Nullable

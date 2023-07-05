@@ -1,4 +1,4 @@
-package com.janonimo.tazma.user;
+package com.janonimo.tazma.deserializer;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;

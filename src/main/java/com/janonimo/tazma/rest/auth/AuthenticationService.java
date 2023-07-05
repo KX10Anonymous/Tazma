@@ -8,8 +8,8 @@ import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.token.TokenType;
 import com.janonimo.tazma.user.Role;
 import com.janonimo.tazma.user.User;
-import com.janonimo.tazma.user.RoleDeserializer;
-import com.janonimo.tazma.user.UserRepository;
+import com.janonimo.tazma.deserializer.RoleDeserializer;
+import com.janonimo.tazma.user.services.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -55,9 +55,10 @@ public class AuthenticationService {
             return AuthenticationResponse.builder()
                     .accessToken(jwtToken)
                     .refreshToken(refreshToken)
+                    .role(user.getRole().toString())
                     .build();
         } catch (BadCredentialsException ex) {
-            return new AuthenticationResponse("", "");
+            return new AuthenticationResponse("", "", "");
         }
 
     }
@@ -100,9 +101,10 @@ public class AuthenticationService {
             return AuthenticationResponse.builder()
                     .accessToken(jwtToken)
                     .refreshToken(refreshToken)
+                    .role(user.getRole().toString())
                     .build();
         } catch (BadCredentialsException ex) {
-            return new AuthenticationResponse("", "");
+            return new AuthenticationResponse("", "","");
         }
     }
 

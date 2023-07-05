@@ -5,7 +5,9 @@ const UserProvider = ({ children }) => {
   const [jwt, setJwt] = useState("");
 
   const value = { jwt, setJwt };
+
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+ 
 };
 
 function useUser() {

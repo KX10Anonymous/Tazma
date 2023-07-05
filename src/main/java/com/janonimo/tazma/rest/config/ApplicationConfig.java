@@ -2,7 +2,7 @@ package com.janonimo.tazma.rest.config;
 
 
 
-import com.janonimo.tazma.user.UserRepository;
+import com.janonimo.tazma.user.services.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

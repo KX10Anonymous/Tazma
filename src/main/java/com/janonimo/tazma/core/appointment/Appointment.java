@@ -1,6 +1,7 @@
 package com.janonimo.tazma.core.appointment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.janonimo.tazma.core.reporting.Review;
 import com.janonimo.tazma.user.User;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -16,6 +17,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 
 /**
@@ -61,8 +64,15 @@ public class Appointment {
     @OneToOne(fetch=FetchType.EAGER)
     @JsonProperty("style")
     private Style style;
-    
+
+    @JsonProperty("appointmentType")
+    private AppointmentType appointmentType;
+
+    @OneToOne
+    private Review review;
     @Enumerated(EnumType.STRING)
     @JsonProperty("status")
     private EStatus status;
+    @JsonProperty("time")
+    private LocalDateTime appointmentTime;
 }

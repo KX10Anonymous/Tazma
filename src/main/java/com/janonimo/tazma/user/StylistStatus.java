@@ -11,12 +11,8 @@ package com.janonimo.tazma.user;
 public enum StylistStatus {
     AVAILABLE, UNAVAILABLE;
 
-    /**
-     * 
-     * @param value
-     * @return 
-     */
-    static StylistStatus fromString(String value) {
+
+   public static StylistStatus fromString(String value) {
         StylistStatus status = null;
         for (StylistStatus s: StylistStatus.values()) {
             if (s.name().equalsIgnoreCase(value)) {

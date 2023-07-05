@@ -14,7 +14,18 @@ import { useUser } from "../UserProvider";
 
 function NavBar() { 
   const user = useUser();
-  const [showNavNoTogglerThird, setShowNavNoTogglerThird] = useState(false);
+  const [showNavNoTogglerThird, setShowNavNoTogglerThird] = useState(true);
+  
+  const [iconsActive, setIconsActive] = useState('tab1');
+
+  const handleIconsClick = (value) => {
+    if (value === iconsActive) {
+      return;
+    }
+
+    setIconsActive(value);
+  };
+
 
   const handleLogout = async () => {
    // try {
@@ -58,43 +69,23 @@ function NavBar() {
           >
             <MDBIcon icon='bars' fas />
           </MDBNavbarToggler>
-          <MDBNavbarBrand href='#'>tazma</MDBNavbarBrand>
-          <MDBCollapse navbar show={showNavNoTogglerThird}>
-            <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
-              <MDBNavbarItem>
-                <MDBNavbarLink active aria-current='page' href='/home'>
-                  Home
-                </MDBNavbarLink>
-              </MDBNavbarItem>
-              <MDBNavbarItem>
-                <MDBNavbarLink href='#'>Stylists</MDBNavbarLink>
-              </MDBNavbarItem>
-              <MDBNavbarItem>
-                <MDBNavbarLink href='/appointments'>Hairdo</MDBNavbarLink>
-              </MDBNavbarItem>
-              <MDBNavbarItem>
-                <MDBNavbarLink href='#'>About</MDBNavbarLink>
-              </MDBNavbarItem>
-              <MDBNavbarItem>
-                <MDBNavbarLink href='#'>Contact</MDBNavbarLink>
-              </MDBNavbarItem>
-              {user && user.jwt ? (
-                <>
-                  <MDBNavbarItem>
-                    <MDBNavbarLink href='#'>Appointments</MDBNavbarLink>
-                  </MDBNavbarItem>
-                  <MDBNavbarItem>
-                  <MDBNavbarLink  onClick={handleLogout} tabIndex={0} aria-disabled='false'>
-                    Logout
-                  </MDBNavbarLink>
-                  </MDBNavbarItem>
-                </>
-                ) : (
-                <>
-                  <MDBNavbarItem>
-                    <MDBNavbarLink href='/login'>Login</MDBNavbarLink>
-                  </MDBNavbarItem>
-                  <MDBNavbarItem></MDBNavbarItem>
+          <MDBNavbarBrand href='/home'>tazma</MDBNavbarBrand>
+            <MDBCollapse navbar justify="center" show={showNavNoTogglerThird}>
+              <MDBNavbarNav className='mr-auto mb-2 mb-lg-0'>
+                {user && user.jwt ? (
+                  <>
+                    
+                    <MDBNavbarItem>
+                      <MDBNavbarLink  onClick={handleLogout} tabIndex={0} aria-disabled='false'>
+                        Logout
+                      </MDBNavbarLink>
+                    </MDBNavbarItem>
+                  </>
+                  ) : (
+                 <>
+                    <MDBNavbarItem>
+                      <MDBNavbarLink href='/login'>Login</MDBNavbarLink>
+                    </MDBNavbarItem>
                 </>
               )}
             </MDBNavbarNav>

@@ -1,7 +1,9 @@
 
 package com.janonimo.tazma.rest.auth;
 
+import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.User;
+import com.janonimo.tazma.user.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +25,7 @@ public class UsersControllers {
     private final AuthenticationService authService;
     private final UserService userService;
 
+
     /**
      * Used To Send the User Information to the Application
      */
@@ -38,6 +41,7 @@ public class UsersControllers {
     
      @GetMapping("/location/{jwt}")
     public ResponseEntity<?> usersByLocation(@PathVariable String jwt){
+
         return new ResponseEntity<>(userService.findByAddress(jwt), HttpStatus.OK);
     }
     

@@ -35,6 +35,7 @@ const Login = () => {
       (data) => {
          // Store the JWT in local storage
         localStorage.setItem('jwt', data.jwt);
+        localStorage.setItem('role', data.role);
         user.setJwt(data.jwt);
         navigate("/home");
       }
