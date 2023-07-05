@@ -1,5 +1,6 @@
 package com.janonimo.tazma.rest.auth;
 
+import com.janonimo.tazma.user.Gender;
 import com.janonimo.tazma.user.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,4 +19,6 @@ public class RegisterRequest {
     private String password;
     private Role role;
     private String phone;
+
+    private Gender gender;
 }

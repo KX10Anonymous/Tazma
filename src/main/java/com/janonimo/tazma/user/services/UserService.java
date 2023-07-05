@@ -1,12 +1,11 @@
 package com.janonimo.tazma.user.services;
 
-import com.janonimo.tazma.rest.auth.AuthenticationService;
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.Address;
 import com.janonimo.tazma.user.Role;
 import com.janonimo.tazma.user.StylistStatus;
 import com.janonimo.tazma.user.User;
-import com.janonimo.tazma.user.services.UserRepository;
+
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,19 +22,21 @@ public class UserService {
     private final TokenRepository tokenRepository;
     private final AddressRepository addressRepository;
 
-    public User save(User user){
-        if(user.getAddress() != null){
-            Address address = user.getAddress();
+    public Address save(String jwt, Address address){
+        if(address != null){
+            User user = tokenRepository.findByToken(jwt).get().user;
             address.setUser(user);
-            address = addressRepository.save(address);
-            user.setAddress(address);
+            return addressRepository.save(address);
         }
+        return null;
+    }
+    public User save(User user){
         return repository.save(user);
     }
     public List<User> findByAddress(String jwt){
         User user = tokenRepository.findByToken(jwt).get().user;
         Address address = addressRepository.getUserAddress(user.getId()).get();
-        ArrayList<User> stylists = (ArrayList<User>) repository.findByAddress(address.getTown(), address.getProvince());
+        ArrayList<User> stylists = (ArrayList<User>) repository.findByAddress(address.getArea(), address.getProvince());
         for(User stylist : stylists){
             stylist.setAddress(addressRepository.getUserAddress(stylist.getId()).get());
         }

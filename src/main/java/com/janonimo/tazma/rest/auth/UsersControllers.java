@@ -29,18 +29,31 @@ public class UsersControllers {
         return new ResponseEntity<>(authService.read(jwt), HttpStatus.OK);
     }
 
-    @PutMapping("/address/{jwt}")
-    public ResponseEntity<User> edit(@PathVariable String jwt,@RequestBody Address address){
+    @PostMapping("/address/{jwt}")
+    public ResponseEntity<Address> address(@PathVariable String jwt,@RequestBody Address address){
+        return getUserResponseEntity(jwt, address);
+    }
+
+    private ResponseEntity<Address> getUserResponseEntity(@PathVariable String jwt, @RequestBody Address address) {
         Token token = tokenRepository.findByToken(jwt).get();
         if(!token.isExpired()){
-            User tempUser = token.user;
-            tempUser.setAddress(address);
-            return new ResponseEntity<>(userService.save(tempUser), HttpStatus.OK);
+            return new ResponseEntity<>(userService.save(jwt, address), HttpStatus.OK);
         }
-
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
+    @PutMapping("/updateaddress/{jwt}")
+    public ResponseEntity<Address> updateAddress(@PathVariable String jwt,@RequestBody Address address){
+        return getUserResponseEntity(jwt, address);
+    }
+    @PostMapping("/edit/{jwt}")
+    public ResponseEntity<User> edit(@PathVariable String jwt,@RequestBody User user){
+        Token token = tokenRepository.findByToken(jwt).get();
+        if(!token.isExpired()){
+            return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
     @GetMapping("/available/{jwt}")
     public ResponseEntity<?> availableUsers(@PathVariable String jwt){
         return new ResponseEntity<>(userService.findByStatus(jwt), HttpStatus.OK);
@@ -48,7 +61,6 @@ public class UsersControllers {
     
      @GetMapping("/location/{jwt}")
     public ResponseEntity<?> usersByLocation(@PathVariable String jwt){
-
         return new ResponseEntity<>(userService.findByAddress(jwt), HttpStatus.OK);
     }
     

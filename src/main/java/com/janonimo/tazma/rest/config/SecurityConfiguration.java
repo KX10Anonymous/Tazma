@@ -41,7 +41,10 @@ public class SecurityConfiguration {
                 .csrf().disable()
                 .authorizeHttpRequests()
                 .requestMatchers("/api/auth/*",
-                        "/api/*",
+                        "/api/styles/*",
+                        "/api/reviews/*",
+                        "/api/posts/*",
+                        "/api/appointments/*",
                         "/resources/**",
                         "/",
                         "/login",

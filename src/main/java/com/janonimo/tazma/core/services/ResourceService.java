@@ -72,17 +72,16 @@ public class ResourceService {
     }
 
     public Resource save(MultipartFile file, Style style) {
-        String path = PATH.concat(file.getName());
+        String path = PATH +  file.getOriginalFilename();
         Resource resource = new Resource();
         resource.setPath(path);
         resource.setStyle(style);
-        resource = create(resource);                    //Save Resource In Database
-        if (resource != null) {
-            try {
-                file.transferTo(new File(path));
-            } catch (IOException ex) {
-                return null;
-            }
+        Resource temp = resourceRepository.save(resource);                   //Save Resource In Database
+
+        try {
+            file.transferTo(new File(path));
+        } catch (IOException ex) {
+            return null;
         }
         return resource;
     }

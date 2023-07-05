@@ -58,7 +58,7 @@ public class AppointmentService {
                 Double lon = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(appointment.getClient().getAddress()));
                 temp.setLatitude(lat);
                 temp.setLongitude(lon);
-                temp.setLocationName(clientAddress.getProvince() +" " + clientAddress.getTown() + " " + clientAddress.getStreetName());
+                temp.setLocationName(clientAddress.getProvince() +" " + clientAddress.getArea() + " " + clientAddress.getStreetName());
                 Location loc = locationService.create(temp);
                 appointment.setLocation(loc);
             }else{
@@ -67,7 +67,7 @@ public class AppointmentService {
                 Double lon = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(appointed.getAddress()));
                 temp.setLatitude(lat);
                 temp.setLongitude(lon);
-                temp.setLocationName(clientAddress.getProvince() +" " + clientAddress.getTown() + " " + clientAddress.getStreetName());
+                temp.setLocationName(clientAddress.getProvince() +" " + clientAddress.getArea() + " " + clientAddress.getStreetName());
                 Location loc = locationService.create(temp);
                 appointment.setLocation(loc);
             }

@@ -16,14 +16,14 @@ public interface UserRepository extends JpaRepository<User, Long> {
     Optional<User> findByEmail(String email);
     
     @Query(value="""
-                   select a from User a where a.address.town = :town
+                   select a from User a where a.address.area = :town
                    and a.role = 'STYLIST' and a.address.province = :province
            """)
     List<User> findByAddress(String town, String province);
 
     @Query(value="""
                    select a from User a where a.firstname = :firstname
-                   and a.role = 'STYLIST' and a.lastname = :lastname and a.address.town =:town
+                   and a.role = 'STYLIST' and a.lastname = :lastname and a.address.area =:town
            """)
     List<User>findByNames(String firstname, String lastname, String town);
 }

@@ -55,7 +55,9 @@ const Register = () => {
     })
       .then((response) => response.json().then(
         (data) => {
+          localStorage.setItem("jwt", data.jwt);
           user.setJwt(data.jwt);
+          navigate("/address")
         }
       ))
       .catch((message) => {

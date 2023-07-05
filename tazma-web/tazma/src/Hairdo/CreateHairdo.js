@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 export default function CreateHairdo() {
   const navigate = useNavigate();
   const [styleName, setStyleName] = useState("");
-  const [id, setId] = useState();
   const [files, setFiles] = useState([]);
   const [buttonColor1, setButtonColorA] = useState('info');
   const [buttonColor2, setButtonColorB] = useState('info');
@@ -34,49 +33,64 @@ export default function CreateHairdo() {
   };
 
   const handleChange = (e)=>{
-    setFiles(e.target.files);
+    const selectedFiles = e.target.files;
+    const updatedFiles = Array.from(selectedFiles).map((file) => {
+      return { file, originalName: file.name };
+    });
+    setFiles(updatedFiles);
+   // console.log(e.target.files);
+    ///console.log("Files added");
+    //const selectedFiles = Array.prototype.slice.call(e.target.files);
+    //setFiles(selectedFiles);
   };
 
-  const saveHairdo = ()=>{
-    
+  const saveHairdo = () => {
     const reqBody = {
-        styleName: styleName,
-        gender: gender,
-      };
-
-    fetch("http://localhost:8080/tazma/api/styles/create", {
+      styleName: styleName,
+      gender: gender,
+    };
+  
+    fetch("http://localhost:8080/tazma/api/styles/create/" + localStorage.getItem("jwt"), {
       headers: {
         "Content-Type": "application/json",
       },
       method: "post",
       body: JSON.stringify(reqBody),
     })
-      .then((response) => response.json().then(
-        (data) => {
-          setId(data.id);
-        }
-      ))
-      .catch((message) => {
-        alert(message);
-      });
-
-      const formData = new FormData();
-    for(let i = 0; i < files.length; i++){
-        formData.append(`images[${i}]`);
-        fetch("http://localhost:8080/tazma/api/styles/upload/"+id, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "post",
-      body: JSON.stringify(formData),
-    })
       .then((response) => response.json())
-      .catch((message) => {
-        alert(message);
+      .then((data) => {
+        const id = data.id;
+        const uploadPromises = [];
+       /// console.log("New ID: " + id);
+        //console.log("About to LOOP");
+        for (let i = 0; i < files.length; i+=1) {
+          //console.log("LOOPING!!!!!!!!!!!!!!!!");
+          const { file, originalName } = files[i];
+          const formData = new FormData();
+          formData.append("file", file, originalName);
+          console.log(formData);
+          const uploadPromise = fetch("http://localhost:8080/tazma/api/styles/upload/" + id, {
+            
+            method: "post",
+            body: formData,
+          })
+            .then((response) => response.json())
+            .catch((error) => {
+              throw new Error(error);
+            });
+          uploadPromises.push(uploadPromise);
+          formData.delete("file");
+        }
+        return Promise.all(uploadPromises);
+      })
+      .then((results) => {
+        // Handle the results of file uploads if needed
+        console.log(results);
+        navigate("/hairdo");
+      })
+      .catch((error) => {
+        alert(error.message);
       });
-      formData.delete(`images[${i}]`)
-    }
-    navigate("/hairdo")
   };
   return (
     <>
@@ -90,7 +104,7 @@ export default function CreateHairdo() {
 
           <MDBRow >
             <MDBBtnGroup >
-              <MDBBtn style={{ width: '150px', height: '40px' }} onClick={handleClickA} color={buttonColor1} value="MALE" name="options" id="role">
+              <MDBBtn style={{ width: '150px', height: '40px' }}  onClick={handleClickA} color={buttonColor1} value="MALE" name="options" id="role">
                 Male
               </MDBBtn>
               <MDBBtn style={{ width: '150px', height: '40px' }} color={buttonColor2} onClick={handleClickB}   value="FEMALE" name="options" id="role">
@@ -105,7 +119,7 @@ export default function CreateHairdo() {
           
           <MDBRow>
           
-            <MDBFile label='Add Images' onClick={handleChange} size='sm' id="formFileMultiple" multiple accept='image/jpg, image/png, image/jpeg, image/webp' />
+            <MDBFile label='Add Images' onChange={handleChange} size='sm' name="images" id="formFileMultiple" multiple accept='image/jpg, image/png, image/jpeg, image/webp' />
           </MDBRow>
           <br/>
 

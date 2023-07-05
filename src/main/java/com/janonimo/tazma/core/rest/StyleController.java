@@ -8,6 +8,7 @@ import java.util.List;
 import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.Role;
+import com.janonimo.tazma.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -30,13 +31,13 @@ public class StyleController {
     @PostMapping("/create/{jwt}")
     public ResponseEntity<Style> create(@PathVariable String jwt, @RequestBody Style style){
         if(validateUserRequest(jwt) == true){
-            return new ResponseEntity<>(style, HttpStatus.OK);
+            return new ResponseEntity<>(styleService.create(style), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/upload/{id}")
-    public ResponseEntity<?> upload(@PathVariable Integer id, MultipartFile file){
+    public ResponseEntity<?> upload(@PathVariable Integer id,  @RequestParam("file") MultipartFile file){
         return new ResponseEntity<>(styleService.uploadResource(id, file), HttpStatus.OK);
     }
     @GetMapping("/styles")
@@ -68,10 +69,9 @@ public class StyleController {
 
     private boolean validateUserRequest(String jwt){
         Token temp = tokenRepository.findByToken(jwt).get();
-        if(!temp.isExpired() && !temp.isRevoked()){
-            if(temp.getUser().getRole() == Role.ADMIN){
-                return true;
-            }
+        User user = tokenRepository.findByToken(jwt).get().user;
+        if(!temp.isExpired()){
+            return true;
         }
         return false;
     }

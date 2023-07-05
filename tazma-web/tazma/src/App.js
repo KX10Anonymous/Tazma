@@ -2,6 +2,7 @@
 import jwt_decode from "jwt-decode";
 import { useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
+import Address from "./Address/Address";
 import "./App.css";
 import Appointments from './Appointments/Appointments';
 import Homepage from "./Homepage/Homepage";
@@ -34,6 +35,7 @@ function App() {
       <Route path="home" element={<Homepage />} />
       <Route path="/" element={<Homepage />} />
       <Route path="appointments" element={<Appointments/>}/>
+      <Route path="address" element={<Address/>}/>
       <Route path="hairdo"/>
     </Routes>
   );

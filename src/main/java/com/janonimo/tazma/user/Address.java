@@ -23,9 +23,11 @@ public class Address {
     @JsonProperty("id")
     private Long id;
 
-    @JsonProperty("town")
-    private String town;
+    @JsonProperty("area")
+    private String area;
 
+    @JsonProperty("suburb")
+    private String suburb;
     @JsonProperty("street")
     private String streetName;
     @JsonProperty("house")
@@ -38,7 +40,7 @@ public class Address {
 
     @Override
     public String toString() {
-        return town + '\''
+        return area + '\''
                 + streetName +
                 '\'' + houseNumber + '\''
                 + province + '\''

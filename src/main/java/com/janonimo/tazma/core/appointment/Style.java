@@ -28,10 +28,11 @@ public class Style {
     @JsonProperty("styleName")
     private String styleName;
 
+
     @JsonProperty("gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @OneToMany(fetch=FetchType.LAZY)
+    @OneToMany(mappedBy = "style", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonProperty("resources")
     private List<Resource> resources;
 }
