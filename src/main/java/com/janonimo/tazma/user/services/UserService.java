@@ -23,6 +23,15 @@ public class UserService {
     private final TokenRepository tokenRepository;
     private final AddressRepository addressRepository;
 
+    public User save(User user){
+        if(user.getAddress() != null){
+            Address address = user.getAddress();
+            address.setUser(user);
+            address = addressRepository.save(address);
+            user.setAddress(address);
+        }
+        return repository.save(user);
+    }
     public List<User> findByAddress(String jwt){
         User user = tokenRepository.findByToken(jwt).get().user;
         Address address = addressRepository.getUserAddress(user.getId()).get();

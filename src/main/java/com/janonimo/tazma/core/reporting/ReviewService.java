@@ -34,8 +34,8 @@ public class ReviewService {
             reviewRepository.delete(review);
     }
 
-    public void edit(String jwt, Review review){
-        create(jwt, review);
+    public Review edit(String jwt, Review review){
+        return create(jwt, review);
     }
     private boolean validateUser(String jwt, Review review){
         Token token = tokenRepository.findByToken(jwt).get();
@@ -45,7 +45,7 @@ public class ReviewService {
         return true;
     }
 
-    private List<Review> reviews(String jwt){
+    public List<Review> reviews(String jwt){
         Token token = tokenRepository.findByToken(jwt).get();
         if(token.getUser().getRole() == Role.CLIENT){
             return reviewRepository.findAllByClient(token.getUser().getId());

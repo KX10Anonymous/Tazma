@@ -41,6 +41,9 @@ public class PostService {
        return null;
     }
 
+    public Post read(Long id){
+        return postRepository.findById(id).get();
+    }
     public void delete(String jwt, Post post){
         post = postRepository.findById(post.getId()).get();
         User user = tokenRepository.findByToken(jwt).get().user;
