@@ -19,6 +19,8 @@ target/
 *.iml
 *.ipr
 
+
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
@@ -28,6 +30,9 @@ target/
 build/
 !**/src/main/**/build/
 !**/src/test/**/build/
+
+###Immages###
+src/main/resources/StyleResources
 
 ### VS Code ###
 .vscode/
