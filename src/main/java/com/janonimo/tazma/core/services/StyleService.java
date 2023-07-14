@@ -2,7 +2,11 @@ package com.janonimo.tazma.core.services;
 
 import com.janonimo.tazma.core.appointment.Resource;
 import com.janonimo.tazma.core.appointment.Style;
+
+import java.util.ArrayList;
 import java.util.List;
+
+import com.janonimo.tazma.core.rest.response.StyleResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -25,15 +29,25 @@ public class StyleService {
         return create(style);
     }
 
-    public Style read(Integer id){
-        Style style = styleRepository.findById(id).get();
-        List<Resource> resources = srcService.resourcesByStyle(id);
-        style.setResources(resources);
+    public Style read(Long id){
+        Style style = styleRepository.getReferenceById(id);
+       // List<Resource> resources = srcService.resourcesByStyle(id);
+      //  style.setResources(resources);
         return style;
     }
 
-    public List<Style> all(){
-        return styleRepository.findAll();
+    public ArrayList<StyleResponse> all(){
+        List<Style> styles = styleRepository.findAll();
+        ArrayList<StyleResponse> response = new ArrayList<>();
+        for(Style style : styles){
+            Style temp = read(style.getId());
+            StyleResponse res = new StyleResponse();
+            res.setId(temp.getId());
+            res.setTitle(temp.getStyleName());
+            res.setUrl(temp.getResources().get(0).getPath());
+            response.add(res);
+        }
+        return response;
     }
 
     public boolean delete(Style style){
@@ -47,7 +61,7 @@ public class StyleService {
      * @param file
      * @return
      */
-    public Resource uploadResource(Integer id, MultipartFile file){
+    public Resource uploadResource(Long id, MultipartFile file){
         Style style =  styleRepository.findById(id).get();
         return srcService.save(file, style);
 

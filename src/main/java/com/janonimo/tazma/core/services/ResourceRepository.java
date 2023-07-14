@@ -10,13 +10,13 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author JANONIMO
  */
-public interface ResourceRepository extends JpaRepository<Resource, Integer> {
+public interface ResourceRepository extends JpaRepository<Resource, Long> {
      @Query(value = """
       select r from Resource r inner join Style t\s
       on r.style.Id = t.Id\s
       where t.Id = :id
       """)
-    List<Resource> findAllResourcesByStyle(Integer id);
+    List<Resource> findAllResourcesByStyle(Long id);
 
     
     

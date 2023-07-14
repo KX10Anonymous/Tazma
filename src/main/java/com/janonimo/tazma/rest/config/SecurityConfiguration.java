@@ -46,6 +46,7 @@ public class SecurityConfiguration {
                         "/api/posts/*",
                         "/api/appointments/*",
                         "/resources/**",
+                        "/resources/StyleResources/**",
                         "/",
                         "/login",
                         "/register",

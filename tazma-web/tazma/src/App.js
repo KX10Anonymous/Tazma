@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
-import jwt_decode from "jwt-decode";
-import { useEffect, useState } from "react";
+
 import { Route, Routes } from "react-router-dom";
 import Address from "./Address/Address";
 import "./App.css";
@@ -13,21 +12,7 @@ import "./custom.scss";
 
 
 function App() {
-  const [roles, setRoles] = useState([]);
   const user = useUser();
-
-  useEffect(() => {
-    setRoles(getRolesFromJWT());
-  }, [getRolesFromJWT, user.jwt]);
-
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  function getRolesFromJWT() {
-    if (user.jwt) {
-      const decodedJwt = jwt_decode(user.jwt);
-      return decodedJwt.authorities;
-    }
-    return [];
-  }
   return (
     <Routes>
       <Route path="login" element={<Login />} />

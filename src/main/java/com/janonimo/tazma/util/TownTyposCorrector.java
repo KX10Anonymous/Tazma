@@ -3,6 +3,15 @@ import java.util.*;
 
 public class TownTyposCorrector {
 
+    public static final List<String> GAUTENG_NEIGHBORHOODS = Arrays.asList(
+            "Sandton", "Randburg", "Roodepoort", "Midrand", "Centurion",
+            "Pretoria East", "Pretoria West", "Johannesburg CBD", "Bryanston",
+            "Kempton Park", "Bedfordview", "Germiston", "Alberton","Vereenigin",
+            "Edenvale", "Boksburg", "Vanderbijlpark", "Soweto","Lawley", "Lawley Station",
+            "Lenasia", "Ennerdale", "Lehae", "Lenasia South", "Finetown", "Orange Farm",
+            "Sebokeng",
+            "Protea North"
+    );
     private static final Set<String> NEIGHBORHOODS = new TreeSet<>(Arrays.asList(
             "Sandton", "Randburg", "Roodepoort", "Midrand", "Centurion",
             "Pretoria East", "Pretoria West", "Johannesburg CBD", "Bryanston",
@@ -22,7 +31,14 @@ public class TownTyposCorrector {
             "Eversdal", "Loevenstein", "Wynberg", "De Bron", "Morgenster",
             "Pinehurst", "Bosonia", "Loevenstein", "Kanoneiland", "Bo Oakdale",
             "Silver Oaks", "Sonkring", "Amanda Glen", "Ruwari", "Durmonte",
-            "Kleinbron Park", "Bergsig", "Zonnendal", "Burgundy Estate"
+            "Kleinbron Park", "Bergsig", "Zonnendal", "Burgundy Estate", "Nzhelele","Giyani", "Ennerdale",
+            "Hammanskraal", "Protea Glen", "Carltonville", "East Rand","Thembisa", "Alexander",
+            "Lawley", "Finetown", "Grasmere", "Meriting", "Walkerville", "Snake Park", "Chiawelo",
+            "Midway", "Protea South", "Meadowlands", "Diepkloof", "Lawley Station", "Lehae", "Noordgesig", "Hannover Park",
+            "Dlamini", "Kliptown", "Eldorado Park", "Devland", "Mapetla", "Naledi", "Lenasia South", "Poorjtie",
+            "Palm Springs","Sebokeng", "Evaton", "Orange Farm", "Tsakane", "Freedom Park",
+            "Thokoza", "Molapo", "Jabavu", "White City", "Orlande West", "Orlando East",
+            "Protea North", ""
     ));
 
     public static String correctNeighborhoodTypo(String userInput) {

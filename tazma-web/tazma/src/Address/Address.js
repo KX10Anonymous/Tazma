@@ -1,79 +1,176 @@
-import {
-  MDBBtn,
-  MDBCard,
-  MDBCardBody,
-  MDBContainer,
-  MDBInput
-} from 'mdb-react-ui-kit';
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Checkbox from '@mui/material/Checkbox';
+import Container from '@mui/material/Container';
+import CssBaseline from '@mui/material/CssBaseline';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Link from '@mui/material/Link';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
+
+function Copyright(props) {
+  return (
+    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+      {'Copyright © '}
+      <Link color="inherit" href="https://amani.com/">
+        amani.com
+      </Link>{' '}
+      {new Date().getFullYear()}
+      {'.'}
+    </Typography>
+  );
+}
+
+// TODO remove, this demo shouldn't need to reset the theme.
+
+const defaultTheme = createTheme();
+
+export default function Registration() {
+
+  const [selectedGender, setSelectedGender] = React.useState('');
+
+  const handleButtonClick = (gender) => {
+    setSelectedGender(gender.toUpperCase());
+  };
+  const buttons = [
+    <Button
+      key="male"
+      onClick={() => handleButtonClick('male')}
+      variant={selectedGender === 'MALE' ? 'contained' : 'outlined'}
+      sx={{ bgcolor: selectedGender === 'MALE' ? 'green' : undefined }}
+    >
+      Male
+    </Button>,
+    <Button
+      key="female"
+      onClick={() => handleButtonClick('female')}
+      variant={selectedGender === 'FEMALE' ? 'contained' : 'outlined'}
+      sx={{ bgcolor: selectedGender === 'FEMALE' ? 'green' : undefined }}
+    >
+      Female
+    </Button>,
+    <Button
+      key="other"
+      onClick={() => handleButtonClick('other')}
+      variant={selectedGender === 'OTHER' ? 'contained' : 'outlined'}
+      sx={{ bgcolor: selectedGender === 'OTHER' ? 'green' : undefined }}
+    >
+      Other
+    </Button>,
+  ];
   
-  const Address = () => {
-    const navigate = useNavigate();
-    const [province, setProvince] = useState("");
-    const [town, setTown] = useState("");
-    const [street, setStreet] = useState("");
-    const [house, setHouse]=  useState("");
-    const [area, setArea] = useState("");
-    
   
-    
-    function createAddress() {
-      const reqBody = {
-        province: province,
-        house: house,
-        street: street,
-        suburb: town,
-        area: area,
-    
-      };
-  
-      fetch("http://localhost:8080/tazma/api/users/address/" + localStorage.getItem("jwt"), {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "post",
-        body: JSON.stringify(reqBody),
-      })
-      .then(
-        navigate("/home")
-      )
-        };
-    
-  
-    return (
-      <>
-      <MDBContainer fluid className='d-flex align-items-center justify-content-center bg-image' style={{backgroundImage: 'url(https://mdbcdn.b-cdn.net/img/Photos/new-templates/search-box/img4.webp)'}}>
-        <div className='mask gradient-custom-3'></div>
-        <MDBCard className='m-5' style={{maxWidth: '600px'}}>
-          <MDBCardBody className='px-5'>
-            <h2 className="text-uppercase text-center mb-5">Add Address Information</h2>
-            <MDBInput wrapperClass='mb-4' value={province}
-                  onChange={(e) => setProvince(e.target.value)} placeholder='Province' size='lg' id='province' type='text'/>
-  
-            <MDBInput wrapperClass='mb-4' value={area}
-                  onChange={(e) => setArea(e.target.value)} placeholder='Area' size='lg' id='province' type='text'/>
-  
-            <MDBInput wrapperClass='mb-4' value={town}
-                  onChange={(e) => setTown(e.target.value)} placeholder='Neighborhood' size='lg' id='town' type='text'/>
-            
-            <MDBInput wrapperClass='mb-4' value={street}
-                  onChange={(e) => setStreet(e.target.value)} placeholder='Street Name/Number' size='lg' id='text' type='email'/>
-            
-            <MDBInput wrapperClass='mb-4' value={house}
-                  onChange={(e) => setHouse(e.target.value)} placeholder='House Number' size='lg' id='phone' type='text'/>
-            
-            
-            <br/>
-  
-            <MDBBtn style={{ width: '150px', height: '40px' }} className='mb-4 w-100 gradient-custom-4' size='lg' type="button" onClick={() => {
-                  createAddress();
-                }}>Save Address Information</MDBBtn>
-            
-          </MDBCardBody>
-        </MDBCard>
-      </MDBContainer>
-      </>
-    );
-  }
-  export default Address;
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    console.log({
+      email: data.get('email'),
+      password: data.get('password'),
+      firstname: data.get('firstname'),
+      lastname: data.get('lastname'),
+      phone: data.get('phone')
+    });
+  };
+
+  return (
+    <ThemeProvider theme={defaultTheme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <Box
+          sx={{
+            marginTop: 8,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}
+        >
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+            <LockOutlinedIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Additional Information
+          </Typography>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <p>Gender</p>
+          <ButtonGroup  fullWidth margin="normal">{buttons}</ButtonGroup>
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="text"
+              label="Role"
+              name="lastname"
+              autoComplete="text"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="text"
+              label="Province"
+              name="province"
+              autoComplete="text"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              id="area"
+              label="Area"
+              name="area"
+              autoComplete="text"
+              autoFocus
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="town"
+              label="Neighborhood"
+              id="town"
+              autoComplete="current-password"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="street"
+              label="Street Number/Name"
+              id="street"
+              autoComplete="text"
+            />
+            <TextField
+              margin="normal"
+              required
+              fullWidth
+              name="house"
+              label="House Number"
+              id="house"
+              autoComplete="text"
+            />
+            <FormControlLabel
+              control={<Checkbox value="remember" color="primary" />}
+              label="Remember me"
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              sx={{ mt: 3, mb: 2 }}
+            >
+              Save Additional Information
+            </Button>
+          </Box>
+        </Box>
+        <Copyright sx={{ mt: 8, mb: 4 }} />
+      </Container>
+    </ThemeProvider>
+  );
+}

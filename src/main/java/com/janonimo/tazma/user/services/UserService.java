@@ -8,6 +8,9 @@ import com.janonimo.tazma.user.User;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import com.janonimo.tazma.util.ProvinceTyposCorrector;
+import com.janonimo.tazma.util.TownTyposCorrector;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,10 +29,34 @@ public class UserService {
         if(address != null){
             User user = tokenRepository.findByToken(jwt).get().user;
             address.setUser(user);
+            //Correct Area Name if there's a typo
+            address.setArea(TownTyposCorrector.correctNeighborhoodTypo(address.getArea()));
+            //Correct Province name if there's a typo
+            address.setProvince(ProvinceTyposCorrector.correctProvinceTypo(address.getProvince()));
             return addressRepository.save(address);
         }
         return null;
     }
+
+    public Address save(User user, Address address){
+        if(address != null){
+            address.setUser(user);
+            address = addressRepository.save(address);
+            user.setAddress(address);
+            save(user);
+            return address;
+        }
+        return null;
+    }
+
+    public List<User> stylists(){
+        return repository.stylits();
+    }
+
+    public List<User> clients(){
+        return repository.clients();
+    }
+
     public User save(User user){
         return repository.save(user);
     }
@@ -51,6 +78,10 @@ public class UserService {
             }
         }
         return users;
+    }
+
+    public User read(Long id){
+        return repository.getReferenceById(id);
     }
 
 }

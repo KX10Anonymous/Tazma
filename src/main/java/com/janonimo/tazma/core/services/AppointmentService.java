@@ -1,12 +1,13 @@
 package com.janonimo.tazma.core.services;
 
-import com.janonimo.tazma.core.appointment.Appointment;
-import com.janonimo.tazma.core.appointment.AppointmentType;
-import com.janonimo.tazma.core.appointment.Location;
+import com.janonimo.tazma.core.appointment.*;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import com.janonimo.tazma.core.maps.GeocodingService;
+import com.janonimo.tazma.core.rest.response.AppointmentResponse;
 import  com.janonimo.tazma.user.Address;
 import com.janonimo.tazma.user.User;
 import com.janonimo.tazma.user.services.UserService;
@@ -21,8 +22,10 @@ public class AppointmentService {
     private final LocationService locationService;
     private final UserService userService;
     private final GeocodingService geocodingService;
-    public Appointment find(Integer id){
-        return appointmentRepo.findById(id).get();
+    private final ResourceService resourceService;
+    private final StyleService styleService;
+    public Appointment find(Long id){
+        return appointmentRepo.getReferenceById(id);
     }
     
 
@@ -78,37 +81,68 @@ public class AppointmentService {
     }
     
 
+    public Appointment create(Appointment appointment){
+        return appointmentRepo.save(appointment);
+    }
     public Appointment edit(String jwt, Appointment appointment){
         return create(jwt,appointment);
     }
 
-    public List<Appointment> stylistAppointments(Long userId){
-        return appointmentRepo.findAllAppointmentsByStylist(userId);
+    public ArrayList<AppointmentResponse> stylistAppointments(Long userId){
+        ArrayList<Appointment> appointments =  appointmentRepo.findAllAppointmentsByStylist(userId);
+        return getAppointments(appointments);
     }
 
-    public List<Appointment> clientAppointments(Long userId){
-        return appointmentRepo.findAllAppointmentsByStylist(userId);
+    public ArrayList<AppointmentResponse> clientAppointments(Long userId){
+        ArrayList<Appointment> appointments = appointmentRepo.findAllAppointmentsByClient(userId);
+
+        return getAppointments(appointments);
     }
 
-    public void delete(Integer id){
+    public void delete(Long id){
         appointmentRepo.deleteById(id);
     }
 
-    public List<Appointment> readByName(String name){
-        ArrayList<Appointment> list= new ArrayList<>();
-        for(Location loc : locationService.findByName(name)){
-            list.add(loc.getAppointment());
+    private ArrayList<AppointmentResponse> getAppointments(ArrayList<Appointment> appointments){
+        ArrayList<AppointmentResponse> response = new ArrayList<>();
+        for(Appointment appointment : appointments){
+            Logger logger = Logger.getLogger(AppointmentService.class.getName());
+            logger.info("Test");
+            Style style = styleService.read(appointment.getStyle().getId());
+            Resource resource = resourceService.resourcesByStyle(style.getId()).get(0);
+            AppointmentResponse r = AppointmentResponse.builder()
+                    .id(appointment.getId())
+                    .client(appointment.getClient().getFirstname() + " " +
+                            appointment.getClient().getLastname())
+                    .time(appointment.getAppointmentTime().toString())
+                    .agreed(appointment.getAgreedAmount())
+                    .counter(appointment.getCounterOffer())
+                    .url(resource.getPath())
+                    .stylist(appointment.getStylist().getFirstname() + " " +
+                            appointment.getStylist().getLastname())
+                    .offer(appointment.getClientOffer())
+                    .type(appointment.getAppointmentType())
+                    .location("")
+                    .status(appointment.getStatus()).build();
+            response.add(r);
         }
-        return list;
+        return response;
     }
+//    public List<Appointment> readByName(String name){
+//        ArrayList<Appointment> list= new ArrayList<>();
+//        for(Location loc : locationService.findByName(name)){
+//            list.add(loc.getAppointments());
+//        }
+//        return list;
+//    }
 
-    public List<Appointment> readAllByName(String name){
-        ArrayList<Appointment> list= new ArrayList<>();
-        for(Location loc : locationService.findAllByName(name)){
-            list.add(loc.getAppointment());
-        }
-        return list;
-    }
+//    public List<Appointment> readAllByName(String name){
+//        ArrayList<Appointment> list= new ArrayList<>();
+//        for(Location loc : locationService.findAllByName(name)){
+//            list.add(loc.getAppointment());
+//        }
+//        return list;
+//    }
 
 
 }

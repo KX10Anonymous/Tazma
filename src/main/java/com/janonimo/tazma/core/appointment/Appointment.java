@@ -3,16 +3,7 @@ package com.janonimo.tazma.core.appointment;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.janonimo.tazma.core.reporting.Review;
 import com.janonimo.tazma.user.User;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,14 +26,14 @@ public class Appointment {
     @Id
     @GeneratedValue
     @JsonProperty("id")
-    private Integer Id;
-    
-    @OneToOne(fetch = FetchType.EAGER)
+    private Long Id;
+
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "client_id")
     @JsonProperty("client")
     private User client;
-    
-    @OneToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name = "stylist_id")
     @JsonProperty("stylist")
     private User stylist;
@@ -53,7 +44,7 @@ public class Appointment {
     @JsonProperty("counterOffer")
     private Double counterOffer;
     
-    @OneToOne(cascade= CascadeType.ALL)
+    @ManyToOne(cascade= CascadeType.ALL)
     @JsonProperty("location")
     private Location location;
     
@@ -61,14 +52,14 @@ public class Appointment {
     private Double agreedAmount;
     
     @JoinColumn(name="style_id")
-    @OneToOne(fetch=FetchType.EAGER)
+    @ManyToOne(fetch=FetchType.EAGER)
     @JsonProperty("style")
     private Style style;
 
     @JsonProperty("appointmentType")
     private AppointmentType appointmentType;
 
-    @OneToOne
+    @OneToOne(mappedBy = "appointment")
     private Review review;
     @Enumerated(EnumType.STRING)
     @JsonProperty("status")

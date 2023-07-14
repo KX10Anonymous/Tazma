@@ -26,4 +26,15 @@ public interface UserRepository extends JpaRepository<User, Long> {
                    and a.role = 'STYLIST' and a.lastname = :lastname and a.address.area =:town
            """)
     List<User>findByNames(String firstname, String lastname, String town);
+
+    @Query(value="""
+                   select a from User a where
+                   a.role = 'CLIENT'
+           """)
+    List<User> clients();
+    @Query(value="""
+                   select a from User a where
+                   a.role = 'STYLIST'
+           """)
+    List<User> stylits();
 }

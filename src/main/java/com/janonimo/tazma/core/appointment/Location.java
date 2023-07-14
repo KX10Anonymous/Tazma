@@ -1,14 +1,12 @@
 package com.janonimo.tazma.core.appointment;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.List;
 
 /**
  *
@@ -24,7 +22,7 @@ public class Location {
     @Id
     @GeneratedValue
     @JsonProperty("id")
-    private Integer Id;
+    private Long Id;
     
     @JsonProperty("locationName")
     private String locationName;
@@ -34,8 +32,8 @@ public class Location {
     
     @JsonProperty("latitude")
     private double latitude;
-    
-    @OneToOne
+
+    @OneToMany(mappedBy = "location",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JsonProperty("appointment")
-    private Appointment appointment;
+    private List<Appointment> appointments;
 }

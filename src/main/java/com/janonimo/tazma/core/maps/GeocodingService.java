@@ -1,11 +1,9 @@
 package com.janonimo.tazma.core.maps;
 
-import com.janonimo.tazma.core.appointment.Location;
 import com.janonimo.tazma.user.Address;
 import com.nimbusds.jose.shaded.gson.Gson;
 import com.nimbusds.jose.shaded.gson.JsonArray;
 import com.nimbusds.jose.shaded.gson.JsonObject;
-import com.nimbusds.jose.shaded.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;

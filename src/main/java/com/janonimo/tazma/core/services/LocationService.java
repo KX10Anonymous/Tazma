@@ -20,7 +20,7 @@ public class LocationService {
      * @param id
      * @return 
      */
-    public Location read(Integer id){
+    public Location read(Long id){
         return locationRepository.findById(id).get();
     }
     
@@ -50,16 +50,16 @@ public class LocationService {
      * @param locationName
      * @return 
      */
-    public Set<Location> findByName(String locationName){
-        return locationRepository.findByName(locationName);
-    }
- 
-     /**
-     * Find all appointments of the stylist around a specific area.
-     * @param locationName
-     * @return 
-     */
-    public Set<Location> findAllByName(String locationName){
-        return locationRepository.findAllByName(locationName);
-    }
+//    public Set<Location> findByName(String locationName){
+//        return locationRepository.findByName(locationName);
+//    }
+//
+//     /**
+//     * Find all appointments of the stylist around a specific area.
+//     * @param locationName
+//     * @return
+//     */
+//    public Set<Location> findAllByName(String locationName){
+//        return locationRepository.findAllByName(locationName);
+//    }
 }

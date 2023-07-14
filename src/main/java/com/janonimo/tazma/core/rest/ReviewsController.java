@@ -1,12 +1,11 @@
 package com.janonimo.tazma.core.rest;
 
 import com.janonimo.tazma.core.reporting.Review;
-import com.janonimo.tazma.core.reporting.ReviewService;
+import com.janonimo.tazma.core.reporting.services.ReviewService;
 import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

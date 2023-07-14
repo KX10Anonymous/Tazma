@@ -1,11 +1,14 @@
 package com.janonimo.tazma.core.rest;
 
 import com.janonimo.tazma.core.appointment.Appointment;
+import com.janonimo.tazma.core.rest.response.AppointmentResponse;
 import com.janonimo.tazma.core.services.AppointmentService;
 import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.Role;
 import com.janonimo.tazma.user.User;
+
+import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +29,7 @@ public class AppointmentController {
     private final TokenRepository tokenRepository;
     
 
-    @PostMapping("/create")
+    @PostMapping("/create/{jwt}")
     public ResponseEntity<Appointment> create(@PathVariable String jwt, @RequestBody Appointment appointment) {
         if(validateUserRequest(jwt)){
             appointment.setClient(tokenRepository.findByToken(jwt).get().getUser());
@@ -35,8 +38,8 @@ public class AppointmentController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
-    @GetMapping("/appointments")
-    public ResponseEntity<List<Appointment>> appointments(@PathVariable String jwt) {
+    @GetMapping("/all/{jwt}")
+    public ResponseEntity<List<AppointmentResponse>> appointments(@PathVariable String jwt) {
         Token temp = tokenRepository.findByToken(jwt).get();
         User user = temp.getUser();
         if (user.getRole() == Role.CLIENT) {
@@ -44,7 +47,7 @@ public class AppointmentController {
         } else if(user.getRole() == Role.STYLIST){
             return new ResponseEntity<>(appointmentService.stylistAppointments(user.getId()), HttpStatus.OK);
         }
-        return null;
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     /**
@@ -63,7 +66,7 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/delete/{jwt}")
-    public ResponseEntity<?> delete(@PathVariable String jwt, @RequestBody Integer id) {
+    public ResponseEntity<?> delete(@PathVariable String jwt, @RequestBody Long id) {
         if(validateUserRequest(jwt, id)){
             appointmentService.delete(id);
             return ResponseEntity.ok("Appointment Deleted");
@@ -72,7 +75,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/read/{jwt}")
-    public ResponseEntity<Appointment> read(@PathVariable String jwt, @RequestBody Integer id) {
+    public ResponseEntity<Appointment> read(@PathVariable String jwt, @RequestBody Long id) {
         if(validateUserRequest(jwt, id) == true)
             return new ResponseEntity<>(appointmentService.find(id), HttpStatus.OK);
         else
@@ -80,19 +83,19 @@ public class AppointmentController {
     }
 
 
-    @GetMapping("/searcha/{name}")
-    public ResponseEntity<List<Appointment>> searchActive(@PathVariable String name){
-        
-        return new ResponseEntity<>(appointmentService.readByName(name), HttpStatus.OK);
-    }
+//    @GetMapping("/searcha/{name}")
+//    public ResponseEntity<List<Appointment>> searchActive(@PathVariable String name){
+//
+//        return new ResponseEntity<>(appointmentService.readByName(name), HttpStatus.OK);
+//    }
     
 
-    @GetMapping("/searchall/{name}")
-    public ResponseEntity<List<Appointment>> searchAll(@PathVariable String name){
-        return new ResponseEntity<>(appointmentService.readAllByName(name), HttpStatus.OK);
-    }
+//    @GetMapping("/searchall/{name}")
+//    public ResponseEntity<List<Appointment>> searchAll(@PathVariable String name){
+//        return new ResponseEntity<>(appointmentService.readAllByName(name), HttpStatus.OK);
+//    }
 
-    private boolean validateUserRequest(String jwt, Integer id){
+    private boolean validateUserRequest(String jwt, Long id){
         Appointment tempAppointment = appointmentService.find(id);
         Token temp = tokenRepository.findByToken(jwt).get();
         if(!temp.isExpired() && !temp.isRevoked()){

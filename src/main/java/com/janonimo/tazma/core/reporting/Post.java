@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -28,4 +29,7 @@ public class Post {
     @JoinColumn(name="stylist_id")
     @ManyToOne
     private User stylist;
+
+    @OneToMany
+    private List<Reaction> reactions;
 }

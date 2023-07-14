@@ -23,16 +23,19 @@ public class Style {
     @Id
     @GeneratedValue
     @JsonProperty("id")
-    private Integer Id;
+    private Long Id;
     
-    @JsonProperty("styleName")
+    @JsonProperty("title")
     private String styleName;
 
 
     @JsonProperty("gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
-    @OneToMany(mappedBy = "style", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "style", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonProperty("resources")
     private List<Resource> resources;
+
+    @OneToMany(mappedBy = "style",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private List<Appointment> appointments;
 }

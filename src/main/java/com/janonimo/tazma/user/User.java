@@ -75,14 +75,15 @@ public class User implements UserDetails{
     @Enumerated(EnumType.STRING)
     @JsonProperty("role")
     private Role role;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Appointment> appointments;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private Collection<Appointment>appointments;
-    
+
     @Override
     public String getUsername() {
         return email;

@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *
  * @author JANONIMO
  */
-public interface StyleRepository extends JpaRepository<Style, Integer>{
-   
+public interface StyleRepository extends JpaRepository<Style, Long>{
+
 }

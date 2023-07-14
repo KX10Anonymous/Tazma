@@ -46,9 +46,8 @@ public class AuthenticationController {
         service.refreshToken(request, response);
     }
 
-    @GetMapping("/logout{jwt}")
-    @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
-    public void logout(@PathVariable("jwt") String jwt){
+    @GetMapping("/logout/{jwt}")
+    public void logout(@PathVariable String jwt){
         service.revokeToken(jwt);
     }
 

@@ -19,7 +19,7 @@ import lombok.NoArgsConstructor;
 public class Resource {
     @Id
     @GeneratedValue
-    private Integer Id;
+    private Long Id;
     
     private String path;
     

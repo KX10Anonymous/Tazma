@@ -43,7 +43,7 @@ public class ResourceService {
      * @param id
      * @return
      */
-    public Resource read(Integer id) {
+    public Resource read(Long id) {
         return resourceRepository.findById(id).get();
     }
 
@@ -59,7 +59,7 @@ public class ResourceService {
      * @param id
      * @return
      */
-    public List<Resource> resourcesByStyle(Integer id) {
+    public List<Resource> resourcesByStyle(Long id) {
         return resourceRepository.findAllResourcesByStyle(id);
     }
 
@@ -92,7 +92,7 @@ public class ResourceService {
      * @param id
      * @return
      */
-    public byte[] download(Integer id) {
+    public byte[] download(Long id) {
         byte[] image = null;
         Optional<Resource> file = resourceRepository.findById(id);
         try {
