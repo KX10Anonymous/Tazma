@@ -13,6 +13,9 @@ import org.springframework.data.jpa.repository.Query;
  * @author JANONIMO
  */
 public interface UserRepository extends JpaRepository<User, Long> {
+    @Query(value="""
+                   select a from User a where a.email = :email
+           """)
     Optional<User> findByEmail(String email);
     
     @Query(value="""
@@ -36,5 +39,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
                    select a from User a where
                    a.role = 'STYLIST'
            """)
-    List<User> stylits();
+    List<User> stylists();
+
+    @Query(value="""
+                   select a from User a where a.phone = :phone
+           """)
+    public Optional<User> findByPhone(String phone);
 }

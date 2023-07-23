@@ -61,7 +61,7 @@ public class SecurityConfiguration {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .logout()
                 .logoutRequestMatcher(new OrRequestMatcher(
-                        new AntPathRequestMatcher("/api/v1/auth/logout"),
+                        new AntPathRequestMatcher("/api/auth/logout"),
                         new AntPathRequestMatcher("/logout")
                 ))
                 .addLogoutHandler(logoutHandler)

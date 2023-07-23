@@ -31,7 +31,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        if (request.getServletPath().contains("/api/auth")) {
+        if (request.getServletPath().contains("/api/authentication")) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 userDetails = this.userDetailsService.loadUserByUsername(userEmail);
             } catch (Exception e) {
-                // Handle the exception appropriately (e.g., return an error response)
+
                 throw new ServletException("Failed to load user details.", e);
             }
 

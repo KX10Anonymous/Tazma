@@ -63,6 +63,16 @@ public class PostsController {
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
+    @GetMapping("/recent")
+    public ResponseEntity<?> recent(){
+        return new ResponseEntity<>(postService.recent(), HttpStatus.OK);
+    }
+
+    @GetMapping("/active")
+    public ResponseEntity<?> mostReactions(){
+        return new ResponseEntity<>(postService.recentMoreReactions(), HttpStatus.OK);
+    }
+
     private boolean validateUser(String jwt){
         Token token = tokenRepository.findByToken(jwt).get();
         if(token.isRevoked() || token.isExpired())

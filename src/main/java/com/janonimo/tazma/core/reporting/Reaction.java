@@ -1,5 +1,6 @@
 package com.janonimo.tazma.core.reporting;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.janonimo.tazma.user.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,12 +20,14 @@ public class Reaction {
     private LocalDateTime created;
     private React react;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="user_id")
+    @JsonManagedReference
     private User user;
 
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="post_id")
+    @JsonManagedReference
     private Post post;
 
 }

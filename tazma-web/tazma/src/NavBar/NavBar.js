@@ -18,7 +18,9 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useUser } from '../UserProvider';
+
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -60,7 +62,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
-  const { jwt } = useUser();
+  const  user  = useUser();
+  const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = React.useState(false)
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
@@ -68,26 +71,16 @@ export default function NavBar() {
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   React.useEffect(() => {
-    const checkLogin = async () => {
-      try {
-        if (jwt) {
-          const response = await fetch('/api/checkToken', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ jwt }),
-          });
-          const isValidToken = await response.json();
-          setIsLoggedIn(isValidToken);
-        }
-      } catch (error) {
-        console.error('Error checking token:', error);
+    const checkLogin = () => {
+      if(user.jwt.length < 1){
+        setIsLoggedIn(false);
+      }else{
+        setIsLoggedIn(true);
       }
     };
 
     checkLogin();
-  }, [jwt]);
+  },[user,navigate] );
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -105,6 +98,25 @@ export default function NavBar() {
   const handleMobileMenuOpen = (event) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
+
+  const handleLogout = async () => {
+         try {
+           console.log("MY JWT:" + user.jwt)
+          
+            await fetch('http://localhost:8080/tazma/api/auth/logout/'+ user.jwt, {
+             method: 'GET',
+             headers: {
+               'Content-Type': 'application/json',
+             },
+            
+           });
+           user.setJwt("");
+           user.setRole("");
+          
+         } catch (error) {
+           console.error('Logout Request Failed!!');
+         }
+    };
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -251,15 +263,7 @@ export default function NavBar() {
             <IconButton size="large"
                         aria-controls={menuId}
                         aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
-                        color="inherit">
-              <LoginIcon/>
-    
-            </IconButton>
-            <IconButton size="large"
-                        aria-controls={menuId}
-                        aria-haspopup="true"
-                        onClick={handleProfileMenuOpen}
+                        onClick={handleLogout}
                         color="inherit">
               <LogoutIcon/>
     

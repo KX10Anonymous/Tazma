@@ -103,6 +103,11 @@ public class DemoController {
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @GetMapping("/test")
+    public String test(){
+        return "Tested";
+    }
     @GetMapping("/clients")
     public  ResponseEntity<?> addClients(){
 

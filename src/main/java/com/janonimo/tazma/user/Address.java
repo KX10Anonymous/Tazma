@@ -1,5 +1,6 @@
 package com.janonimo.tazma.user;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -28,13 +29,18 @@ public class Address {
 
     @JsonProperty("suburb")
     private String suburb;
+
     @JsonProperty("street")
     private String streetName;
+
     @JsonProperty("house")
     private String houseNumber;
+
     @JsonProperty("province")
     private String province;
+
     @OneToOne(cascade = CascadeType.ALL)
+    @JsonManagedReference
     @JsonProperty("user")
     private User user;
 

@@ -20,7 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ResourceService {
 
     private final ResourceRepository resourceRepository;
-    private final String PATH = "C:/Users/JANONIMO/Documents/PROJECTS/Tazma/src/main/resources/StyleResources/";
+    private final String PATH = "C:/Users/JANONIMO/Documents/PROJECTS/Tazma/tazma-web/tazma/public/src/";
 
     /**
      * @param resource
@@ -71,19 +71,23 @@ public class ResourceService {
         return resourceRepository.findAll();
     }
 
+    public Resource findByStyle(Long id){
+        return resourceRepository.findResourceByStyle(id);
+    }
     public Resource save(MultipartFile file, Style style) {
         String path = PATH +  file.getOriginalFilename();
-        Resource resource = new Resource();
-        resource.setPath(path);
-        resource.setStyle(style);
-        Resource temp = resourceRepository.save(resource);                   //Save Resource In Database
-
         try {
             file.transferTo(new File(path));
+            String url = "/src/" + file.getOriginalFilename();
+            Resource resource = new Resource();
+            resource.setPath(url);
+            resource.setStyle(style);
+            return resourceRepository.save(resource);
+
         } catch (IOException ex) {
             return null;
         }
-        return resource;
+
     }
 
     /**

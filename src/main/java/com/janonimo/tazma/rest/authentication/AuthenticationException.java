@@ -1,4 +1,4 @@
-package com.janonimo.tazma.rest.auth;
+package com.janonimo.tazma.rest.authentication;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

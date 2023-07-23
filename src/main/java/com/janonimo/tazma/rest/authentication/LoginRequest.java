@@ -1,4 +1,4 @@
-package com.janonimo.tazma.rest.auth;
+package com.janonimo.tazma.rest.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,9 +10,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
+public class LoginRequest {
     @JsonProperty("email")
-
     private String email;
     @JsonProperty("password")
     String password;

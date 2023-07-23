@@ -1,11 +1,12 @@
 import { MDBTabs, MDBTabsContent, MDBTabsItem, MDBTabsLink, MDBTabsPane } from 'mdb-react-ui-kit';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Appointments from "../Appointments/Appointments";
 import Hairdo from '../Hairdo/Hairdo';
 import { useUser } from "../UserProvider";
 const Homepage = () => {
   const user = useUser();
-
+  const navigate = useNavigate();
   const [fillActive, setFillActive] = useState('tab1');
 
   const handleFillClick = (value) => {
@@ -15,6 +16,12 @@ const Homepage = () => {
     setFillActive(value);
   };
 
+  useEffect(() => {
+    if(!user.jwt){
+      navigate("/login");
+    }
+    
+  });
   return (
     <>
           <MDBTabs fill className='mb-3'>

@@ -50,7 +50,7 @@ public class UserService {
     }
 
     public List<User> stylists(){
-        return repository.stylits();
+        return repository.stylists();
     }
 
     public List<User> clients(){
@@ -82,6 +82,14 @@ public class UserService {
 
     public User read(Long id){
         return repository.getReferenceById(id);
+    }
+
+    public boolean emailExists(String email){
+        return repository.findByEmail(email).isEmpty();
+    }
+
+    public boolean phoneExists(String email){
+        return repository.findByEmail(email).isEmpty();
     }
 
 }

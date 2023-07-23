@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -20,57 +21,76 @@ public class PostService {
     private final PostRepository postRepository;
     private final TokenRepository tokenRepository;
     private final ReactionService reactionService;
-    private final String PATH = "C:/Users/JANONIMO/Documents/PROJECTS/Tazma/src/main/resources/posts/";
+
     public Post save(MultipartFile file, String jwt) {
-        User user = tokenRepository.findByToken(jwt).get().user;
-        if(user.getRole() == Role.STYLIST){
-            String path = PATH.concat(file.getOriginalFilename());
-            Post post = new Post();
-            post.setUrl(path);
-            post.setStylist(user);
-            post.setCreated(LocalDateTime.now());
-            post = postRepository.save(post);
-            if (post.getId() != null) {
-                try {
-                    file.transferTo(new File(path));
-                } catch (IOException ex) {
-                    return null;
+        if (tokenRepository.findByToken(jwt).isPresent()) {
+            User user = tokenRepository.findByToken(jwt).get().user;
+            if (user.getRole() == Role.STYLIST) {
+                String folderName = user.getEmail().toLowerCase().replace("@", "_");
+                String PATH = "C:/Users/JANONIMO/Documents/PROJECTS/Tazma/tazma-web/tazma/public/src/posts/";
+                File personalDir = new File(PATH + folderName);
+                if (!personalDir.exists()) {
+                    personalDir.mkdir();
                 }
+                String resourcePath = PATH.concat(folderName + "/" + file.getOriginalFilename());
+                Post post = new Post();
+                post.setUrl("/src/posts/" + folderName + "/" + file.getOriginalFilename());
+                post.setStylist(user);
+                post.setCreated(LocalDateTime.now());
+                post = postRepository.save(post);
+                assert post != null;
+                if (post.getId() != null) {
+                    try {
+                        file.transferTo(new File(resourcePath));
+                    } catch (IOException ex) {
+                        return null;
+                    }
+                }
+                return post;
             }
-            return post;
+
         }
-       return null;
+        return null;
     }
 
-    public Post read(Long id){
-        return postRepository.findById(id).get();
+    public Post read(Long id) {
+        return Objects.requireNonNull(postRepository.findById(id)).get();
     }
-    public void delete(String jwt, Post post){
-        post = postRepository.findById(post.getId()).get();
+
+    public void delete(String jwt, Post post) {
+        post = Objects.requireNonNull(postRepository.findById(post.getId())).get();
         User user = tokenRepository.findByToken(jwt).get().user;
-        if(user.getRole() == Role.STYLIST){
-            if(user.getId() == post.getStylist().getId()){
+        if (user.getRole() == Role.STYLIST) {
+            if (Objects.equals(user.getId(), post.getStylist().getId())) {
                 postRepository.delete(post);
                 File postFile = new File(post.getUrl());
                 postFile.delete();
                 List<Reaction> reactions = reactionService.findByPost(post.getId());
-                for(Reaction reaction : reactions){
+                for (Reaction reaction : reactions) {
                     reactionService.deleteReaction(reaction);
                 }
             }
-        }else if(user.getRole() == Role.ADMIN){
+        } else if (user.getRole() == Role.ADMIN) {
             postRepository.delete(post);
             File postFile = new File(post.getUrl());
             List<Reaction> reactions = reactionService.findByPost(post.getId());
-            for(Reaction reaction : reactions){
+            for (Reaction reaction : reactions) {
                 reactionService.deleteReaction(reaction);
             }
             postFile.delete();
         }
     }
-    public List<Post> posts(Long id){
+
+    public List<Post> posts(Long id) {
         return postRepository.findAllByStylist(id);
     }
 
+    public List<Post> recent() {
+        return postRepository.findLatest();
+    }
+
+    public List<Post> recentMoreReactions() {
+        return postRepository.findByReactionsCount();
+    }
 
 }

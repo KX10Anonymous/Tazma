@@ -1,5 +1,7 @@
 package com.janonimo.tazma.core.appointment;
 
+
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,5 +27,6 @@ public class Resource {
     
     @ManyToOne(fetch=FetchType.LAZY)
     @JoinColumn(name="style_id")
+    @JsonManagedReference
     private Style style;
 }

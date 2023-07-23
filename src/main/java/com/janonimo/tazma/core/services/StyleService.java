@@ -40,11 +40,10 @@ public class StyleService {
         List<Style> styles = styleRepository.findAll();
         ArrayList<StyleResponse> response = new ArrayList<>();
         for(Style style : styles){
-            Style temp = read(style.getId());
             StyleResponse res = new StyleResponse();
-            res.setId(temp.getId());
-            res.setTitle(temp.getStyleName());
-            res.setUrl(temp.getResources().get(0).getPath());
+            res.setId(style.getId());
+            res.setTitle(style.getStyleName());
+            res.setUrl(srcService.findByStyle(style.getId()).getPath());
             response.add(res);
         }
         return response;

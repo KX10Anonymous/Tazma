@@ -21,13 +21,7 @@ public class ImagesController {
     @GetMapping("/read/{imageUrl:.+}")
     public ResponseEntity<Resource> getImage(@PathVariable String imageUrl) throws MalformedURLException {
         Path imagePath = Paths.get("C:/Users/JANONIMO/PROJECTS/Tazma/src/main/resources/StyleResources/"+ imageUrl);
-        Resource resource = new UrlResource(imagePath.toUri());
 
-        if (resource.exists() && resource.isReadable()) {
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG) // Adjust content type based on your image format
-                    .body(resource);
-        }
         return ResponseEntity.notFound().build();
     }
 }

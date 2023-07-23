@@ -1,5 +1,6 @@
 package com.janonimo.tazma.core.appointment;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -33,7 +34,8 @@ public class Location {
     @JsonProperty("latitude")
     private double latitude;
 
-    @OneToMany(mappedBy = "location",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "location",fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonProperty("appointment")
+    @JsonBackReference
     private List<Appointment> appointments;
 }

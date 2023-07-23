@@ -17,6 +17,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -31,13 +33,14 @@ public class Token {
     @Column(unique = true)
     @JsonProperty("token")
     public String token;
-
   
     @Builder.Default
     @Enumerated(EnumType.STRING)
     public TokenType tokenType = TokenType.BEARER;
     public boolean revoked;
     public boolean expired;
+
+    public LocalDateTime stamp;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")

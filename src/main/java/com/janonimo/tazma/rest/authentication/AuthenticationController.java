@@ -1,4 +1,4 @@
-package com.janonimo.tazma.rest.auth;
+package com.janonimo.tazma.rest.authentication;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -15,22 +15,21 @@ import java.io.IOException;
 @CrossOrigin(origins = {"http://localhost:3000", "http://localhost:8080"})
 public class AuthenticationController {
 
-    private final AuthenticationService service;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) {
-        AuthenticationResponse response = service.register(request);
+        AuthenticationResponse response = authenticationService.register(request);
         if (response.getAccessToken().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
         } else {
             return ResponseEntity.ok(response);
         }
-
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
-        AuthenticationResponse registration = service.authenticate(request);
+    public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody LoginRequest request) {
+        AuthenticationResponse registration = authenticationService.login(request);
         if (registration.getAccessToken().isEmpty()) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         } else {
@@ -38,17 +37,15 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/refresh-token")
-    public void refreshToken(
-            HttpServletRequest request,
-            HttpServletResponse response
-    ) throws IOException {
-        service.refreshToken(request, response);
+    @PostMapping("/refresh-token/{refreshToken}")
+    public void refreshToken(@PathVariable String refreshToken) {
+        authenticationService.refreshToken(refreshToken);
     }
 
     @GetMapping("/logout/{jwt}")
     public void logout(@PathVariable String jwt){
-        service.revokeToken(jwt);
+        authenticationService.revokeToken(jwt);
     }
+
 
 }

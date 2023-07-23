@@ -12,6 +12,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { useNavigate } from "react-router-dom";
+import { useUser } from "../UserProvider";
 
 function Copyright(props) {
   return (
@@ -20,27 +22,33 @@ function Copyright(props) {
       <Link color="inherit" href="https://amani.com/">
         amani.com
       </Link>{' '}
-      {new Date().getFullYear()}
+      {new Date().getFullYear()}1
       {'.'}
     </Typography>
   );
 }
 
-// TODO remove, this demo shouldn't need to reset the theme.
 
 const defaultTheme = createTheme();
 
-export default function Registration() {
-
+export default function Address() {
+  const navigate = useNavigate();
+  const user = useUser();
   const [selectedGender, setSelectedGender] = React.useState('');
+  const [selectedType, setSelectedType] = React.useState('');
 
-  const handleButtonClick = (gender) => {
+  const handleGenderButtonClick = (gender) => {
     setSelectedGender(gender.toUpperCase());
   };
-  const buttons = [
+
+  const handleTypeButtonClick = (type) => {
+    setSelectedType(type.toUpperCase());
+  };
+
+  const genderButtons = [
     <Button
       key="male"
-      onClick={() => handleButtonClick('male')}
+      onClick={() => handleGenderButtonClick('male')}
       variant={selectedGender === 'MALE' ? 'contained' : 'outlined'}
       sx={{ bgcolor: selectedGender === 'MALE' ? 'green' : undefined }}
     >
@@ -48,7 +56,7 @@ export default function Registration() {
     </Button>,
     <Button
       key="female"
-      onClick={() => handleButtonClick('female')}
+      onClick={() => handleGenderButtonClick('female')}
       variant={selectedGender === 'FEMALE' ? 'contained' : 'outlined'}
       sx={{ bgcolor: selectedGender === 'FEMALE' ? 'green' : undefined }}
     >
@@ -56,11 +64,31 @@ export default function Registration() {
     </Button>,
     <Button
       key="other"
-      onClick={() => handleButtonClick('other')}
+      onClick={() => handleGenderButtonClick('other')}
       variant={selectedGender === 'OTHER' ? 'contained' : 'outlined'}
       sx={{ bgcolor: selectedGender === 'OTHER' ? 'green' : undefined }}
     >
       Other
+    </Button>,
+  ];
+
+
+  const typeButtons = [
+    <Button
+      key="client_visit"
+      onClick={() => handleTypeButtonClick('client_visit')}
+      variant={selectedGender === 'CLIENT_VISIT' ? 'contained' : 'outlined'}
+      sx={{ bgcolor: selectedType === 'CLIENT_VISIT' ? 'green' : undefined }}
+    >
+      Client Visit
+    </Button>,
+    <Button
+      key="house_call"
+      onClick={() => handleTypeButtonClick('house_call')}
+      variant={selectedType === 'HOUSE_CALL' ? 'contained' : 'outlined'}
+      sx={{ bgcolor: selectedType === 'HOUSE_CALL' ? 'green' : undefined }}
+    >
+      House Call
     </Button>,
   ];
   
@@ -68,13 +96,52 @@ export default function Registration() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-      firstname: data.get('firstname'),
-      lastname: data.get('lastname'),
+    const addressReqBody = {
+     province: data.get('province'),
+      area: data.get('area'),
+      street: data.get('street'),
+      suburb: data.get('town'),
       phone: data.get('phone')
-    });
+    };
+
+    if(user.role === 'STYLIST'){
+      const operationBody = {
+        appointmentType: selectedType,
+        gender:selectedGender
+      }
+      fetch("http://localhost:8080/tazma/api/users/type-edit/" + user.jwt, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "post",
+        body: JSON.stringify(operationBody),
+      })
+    }else{
+      const operationBody = {
+        gender:selectedGender
+      }
+      fetch("http://localhost:8080/tazma/api/users/type-edit/" + user.jwt, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "post",
+        body: JSON.stringify(operationBody),
+      })
+    }
+
+
+    fetch("http://localhost:8080/tazma/api/users/address/" + user.jwt, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "post",
+        body: JSON.stringify(addressReqBody),
+      })
+      .then(
+        navigate("/home")
+      )
+
+
   };
 
   return (
@@ -97,17 +164,16 @@ export default function Registration() {
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <p>Gender</p>
-          <ButtonGroup  fullWidth margin="normal">{buttons}</ButtonGroup>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="text"
-              label="Role"
-              name="lastname"
-              autoComplete="text"
-              autoFocus
-            />
+          <ButtonGroup  fullWidth margin="normal">{genderButtons}</ButtonGroup>
+          {user && user.role === 'STYLIST' ? (
+            <>
+            <br/>
+          <br/>
+          <p>How do you want to respond to appointments?*</p>
+          <ButtonGroup  fullWidth margin="normal">{typeButtons}</ButtonGroup>
+            </>
+          ):(<></>)}
+          
             <TextField
               margin="normal"
               required

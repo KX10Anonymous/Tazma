@@ -1,5 +1,6 @@
-package com.janonimo.tazma.rest.auth;
+package com.janonimo.tazma.rest.authentication;
 
+import com.janonimo.tazma.core.appointment.AppointmentType;
 import com.janonimo.tazma.user.Gender;
 import com.janonimo.tazma.user.Role;
 import lombok.AllArgsConstructor;
@@ -19,6 +20,6 @@ public class RegisterRequest {
     private String password;
     private Role role;
     private String phone;
-
     private Gender gender;
+    private AppointmentType type;
 }

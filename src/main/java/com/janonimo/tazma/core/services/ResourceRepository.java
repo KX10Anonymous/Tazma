@@ -18,6 +18,9 @@ public interface ResourceRepository extends JpaRepository<Resource, Long> {
       """)
     List<Resource> findAllResourcesByStyle(Long id);
 
-    
-    
+    @Query(value = """
+      select r from Resource r 
+      where r.style.Id = :id
+      """)
+    Resource findResourceByStyle(Long id);
 }

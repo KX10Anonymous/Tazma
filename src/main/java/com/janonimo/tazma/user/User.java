@@ -1,13 +1,11 @@
 package com.janonimo.tazma.user;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.janonimo.tazma.core.appointment.Appointment;
 import com.janonimo.tazma.core.appointment.AppointmentType;
 import com.janonimo.tazma.core.reporting.Post;
 import jakarta.persistence.*;
-
-import java.util.Collection;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +14,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import java.util.Collection;
+import java.util.List;
 
 /**
  *
@@ -53,10 +54,14 @@ public class User implements UserDetails{
     private String password;
 
     @JsonProperty("address")
-    @OneToOne
+    @OneToOne(fetch=FetchType.EAGER)
+    @JsonBackReference
     private Address address;
+
+    @JsonBackReference
     @OneToMany
     private List<Post> posts;
+
     @Nullable
     @JsonProperty("status")
     @Enumerated(EnumType.STRING)
@@ -66,6 +71,7 @@ public class User implements UserDetails{
     @JsonProperty("appointmentType")
     @Enumerated(EnumType.STRING)
     private AppointmentType appointmentType;
+
     @Enumerated(EnumType.STRING)
     @JsonProperty("gender")
     @Nullable
@@ -76,10 +82,12 @@ public class User implements UserDetails{
     @JsonProperty("role")
     private Role role;
 
+    @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Appointment> appointments;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        assert role != null;
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
 

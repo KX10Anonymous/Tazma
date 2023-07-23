@@ -2,7 +2,10 @@ package com.janonimo.tazma.core.rest;
 
 import com.janonimo.tazma.core.appointment.Appointment;
 import com.janonimo.tazma.core.rest.response.AppointmentResponse;
+import com.janonimo.tazma.core.services.AppointmentRequest;
 import com.janonimo.tazma.core.services.AppointmentService;
+import com.janonimo.tazma.core.services.StyleRepository;
+import com.janonimo.tazma.core.services.StyleService;
 import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.Role;
@@ -27,12 +30,21 @@ public class AppointmentController {
 
     private final AppointmentService appointmentService;
     private final TokenRepository tokenRepository;
+    private final StyleService styleService;
     
 
     @PostMapping("/create/{jwt}")
-    public ResponseEntity<Appointment> create(@PathVariable String jwt, @RequestBody Appointment appointment) {
+    public ResponseEntity<Appointment> create(@PathVariable String jwt, @RequestBody AppointmentRequest request) {
         if(validateUserRequest(jwt)){
-            appointment.setClient(tokenRepository.findByToken(jwt).get().getUser());
+            Appointment appointment = Appointment.builder()
+                    .client(tokenRepository.findByToken(jwt).get().getUser())
+                    .appointmentType(request.getType())
+                    .style(styleService.read(request.getStyle()))
+                    .clientOffer(0.0)
+                    .counterOffer(0.0)
+                    .agreedAmount(0.0)
+                    .appointmentType(request.getType()).build();
+
             return new ResponseEntity<>(appointmentService.create(jwt, appointment), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -54,12 +66,15 @@ public class AppointmentController {
      *
      */
     @PutMapping("/edit/{jwt}")
-    public ResponseEntity<Appointment> edit(@PathVariable String jwt, @RequestBody Appointment appointment) {
-        Appointment tempAppointment = appointmentService.find(appointment.getId());
+    public ResponseEntity<Appointment> edit(@PathVariable String jwt, @RequestBody AppointmentRequest request) {
+        Appointment tempAppointment = appointmentService.find(request.getId());
+        tempAppointment.setAppointmentType(request.getType());
+        tempAppointment.setAgreedAmount(request.getOffer());
+        tempAppointment.setAppointmentTime(request.getTime());
         Token temp = tokenRepository.findByToken(jwt).get();
         if(!temp.isExpired() && !temp.isRevoked()){
             if(temp.getUser().getId() == tempAppointment.getStylist().getId() || temp.getUser().getId() == tempAppointment.getClient().getId()){
-                return new ResponseEntity<>(appointmentService.edit(jwt, appointment), HttpStatus.OK);
+                return new ResponseEntity<>(appointmentService.edit(jwt, tempAppointment), HttpStatus.OK);
             }
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -83,7 +98,7 @@ public class AppointmentController {
     }
 
 
-//    @GetMapping("/searcha/{name}")
+//   @GetMapping("/searcha/{name}")
 //    public ResponseEntity<List<Appointment>> searchActive(@PathVariable String name){
 //
 //        return new ResponseEntity<>(appointmentService.readByName(name), HttpStatus.OK);

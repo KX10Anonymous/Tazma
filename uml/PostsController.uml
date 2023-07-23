@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.janonimo.tazma.core.rest.PostsController</OriginalElement>
+  <nodes>
+    <node x="-181.0" y="-39.0">org.springframework.web.bind.annotation.RestController</node>
+    <node x="209.0" y="-116.0">org.springframework.web.bind.annotation.RequestMapping</node>
+    <node x="428.0" y="-61.0">lombok.RequiredArgsConstructor</node>
+    <node x="7.576923076923094" y="142.0">com.janonimo.tazma.core.rest.PostsController</node>
+    <node x="-15.0" y="-116.0">org.springframework.web.bind.annotation.CrossOrigin</node>
+    <node x="477.3269230769231" y="243.0">lombok.RequiredArgsConstructor.AnyAnnotation</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.janonimo.tazma.core.rest.PostsController" target="org.springframework.web.bind.annotation.CrossOrigin" relationship="REALIZATION">
+      <point x="0.0" y="-115.5" />
+      <point x="188.5769230769231" y="117.0" />
+      <point x="87.0" y="117.0" />
+      <point x="0.0" y="104.0" />
+    </edge>
+    <edge source="com.janonimo.tazma.core.rest.PostsController" target="org.springframework.web.bind.annotation.RestController" relationship="REALIZATION">
+      <point x="0.0" y="-115.5" />
+      <point x="188.5769230769231" y="117.0" />
+      <point x="-108.0" y="117.0" />
+      <point x="0.0" y="27.0" />
+    </edge>
+    <edge source="com.janonimo.tazma.core.rest.PostsController" target="org.springframework.web.bind.annotation.RequestMapping" relationship="REALIZATION">
+      <point x="0.0" y="-115.5" />
+      <point x="188.5769230769231" y="117.0" />
+      <point x="308.5" y="117.0" />
+      <point x="0.0" y="104.0" />
+    </edge>
+    <edge source="lombok.RequiredArgsConstructor.AnyAnnotation" target="lombok.RequiredArgsConstructor" relationship="INNER_CLASS">
+      <point x="0.0" y="-14.5" />
+      <point x="551.8269230769231" y="117.0" />
+      <point x="597.5" y="117.0" />
+      <point x="56.5" y="49.0" />
+    </edge>
+    <edge source="com.janonimo.tazma.core.rest.PostsController" target="lombok.RequiredArgsConstructor" relationship="REALIZATION">
+      <point x="0.0" y="-115.5" />
+      <point x="188.5769230769231" y="117.0" />
+      <point x="484.5" y="117.0" />
+      <point x="-56.5" y="49.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="1.0" showDependencies="false" x="236.5" y="128.5" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Constructors</Category>
+    <Category>Fields</Category>
+    <Category>Inner Classes</Category>
+    <Category>Methods</Category>
+    <Category>Properties</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

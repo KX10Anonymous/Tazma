@@ -1,5 +1,7 @@
 package com.janonimo.tazma.core.reporting;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.janonimo.tazma.user.User;
 import jakarta.persistence.*;
@@ -26,10 +28,13 @@ public class Post {
 
     @JsonProperty("url")
     private String url;
+
     @JoinColumn(name="stylist_id")
-    @ManyToOne
+    @ManyToOne(fetch=FetchType.EAGER)
+    @JsonManagedReference
     private User stylist;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<Reaction> reactions;
 }

@@ -49,6 +49,7 @@ public class JwtService {
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
+
     public String generateRefreshToken(
             UserDetails userDetails
     ) {
@@ -103,7 +104,7 @@ public class JwtService {
             MessageDigest digest = MessageDigest.getInstance(algorithm);
             return digest.digest(keyBytes);
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException("Invalid algorithm: " + algorithm, e);
+            throw new IllegalArgumentException("Invalid Algorithm: " + algorithm, e);
         }
     }
 }

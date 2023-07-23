@@ -3,8 +3,10 @@ const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
   const [jwt, setJwt] = useState("");
+  const [role, setRole] = useState("");
+  const [refreshToken, setRefreshToken] = useState("");
 
-  const value = { jwt, setJwt };
+  const value = { jwt, setJwt, role, setRole, refreshToken, setRefreshToken};
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
  

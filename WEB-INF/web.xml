@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <web-app xmlns="http://java.sun.com/xml/ns/javaee"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd
+http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+             version="3.0">
+
+        <!-- Existing configurations in your web.xml -->
+
+        <!-- Add the CORS filter -->
+        <filter>
+            <filter-name>CorsFilter</filter-name>
+            <filter-class>com.janonimo.tazma.corsfilter.CorsFilter</filter-class>
+        </filter>
+
+        <!-- Map the filter to the login API URL -->
+        <filter-mapping>
+            <filter-name>CorsFilter</filter-name>
+            <url-pattern>/tazma/*</url-pattern>
+        </filter-mapping>
+
+        <!-- More configurations if needed -->
+
+    </web-app>
+
+</beans>

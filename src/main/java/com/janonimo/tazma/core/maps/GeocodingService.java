@@ -31,14 +31,10 @@ public class GeocodingService {
                 .host(baseURL)
                 .pathSegment("search", versionNumber, "geocode", query + "." + ext)
                 .queryParam("key", apiKey)
-                // Add additional query parameters as needed
                 .build()
                 .toString();
 
-        // Send the HTTP GET request and retrieve the response
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-
-        // Return the response string
         return response.getBody();
     }
     public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -60,11 +56,8 @@ public class GeocodingService {
 
     public double getLatitudeFromResponse(String response) {
         double latitude = 0.0;
-
-        // Parse the response string and extract the latitude
         Gson gson = new Gson();
         JsonObject responseJson = gson.fromJson(response, JsonObject.class);
-
         JsonArray resultsArray = responseJson.getAsJsonArray("results");
         if (resultsArray.size() > 0) {
             JsonObject firstResult = resultsArray.get(0).getAsJsonObject();
@@ -77,8 +70,6 @@ public class GeocodingService {
 
     public double getLongitudeFromResponse(String response) {
         double longitude = 0.0;
-
-        // Parse the response string and extract the longitude
         Gson gson = new Gson();
         JsonObject responseJson = gson.fromJson(response, JsonObject.class);
 
