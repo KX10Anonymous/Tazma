@@ -20,6 +20,9 @@ import axios from "axios";
 import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useUser } from "../UserProvider";
+import CreateHairdo from "./CreateHairdo";
+import {Add} from "@mui/icons-material/Add";
+import { IconButton } from "@mui/material";
 
 const Hairdo = () => {
   const currentDate = dayjs();
@@ -132,6 +135,32 @@ const Hairdo = () => {
     setAppointmentType(type);
   };
 
+  const renderAddIcon = () => {
+    if (user.role === "ADMIN") {
+      setOpen(true);
+      return (
+        <IconButton>
+        <Add onClick={renderDialog} />
+        </IconButton>
+        );
+        
+      
+    }
+  };
+
+  
+  const renderDialog = () => {
+    <>
+      <Dialog
+        open={open}
+        onClose={handleCloseDialog}
+        fullWidth="md"
+        maxWidth="md">
+        <DialogTitle>Create New Hair Style.</DialogTitle>
+        <DialogContent>{renderCreateHairdo}</DialogContent>
+      </Dialog>
+    </>;
+  };
   const typeButtons = [
     <Button
       key="house_call"
@@ -151,6 +180,14 @@ const Hairdo = () => {
     </Button>,
   ];
 
+  const renderCreateHairdo = () => {
+    if (user.role === "ADMIN") {
+      return <CreateHairdo handleCloseDialog={handleCloseDialog} />;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div
       style={{
@@ -158,6 +195,7 @@ const Hairdo = () => {
         height: "100%", // Set the desired height of the scrollable container
         overflow: "auto", // This will make the container scrollable with hidden scrollbars
       }}>
+      {renderCreateHairdo()}
       <ImageList gap={40} sx={{ width: 1, height: 1 }}>
         {data.map((item) => {
           const url = process.env.PUBLIC_URL + "/" + item.url;

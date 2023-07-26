@@ -1,19 +1,32 @@
 package com.janonimo.tazma.user;
 
-/**
- *
- * @author JANONIMO
- */
-public enum Role {
-    ADMIN, STYLIST, CLIENT;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.janonimo.tazma.user.RoleName;
+import com.janonimo.tazma.user.User;
+import jakarta.persistence.*;
+import lombok.*;
 
-    public static Role fromString(String value) {
-        Role r = null;
-        for (Role role : Role.values()) {
-            if (role.name().equalsIgnoreCase(value)) {
-                r = role;
-            }
-        }
-        return r;
-    }
+import java.util.List;
+
+@Data
+@Builder
+@Table(name = "roles")
+@NoArgsConstructor
+@RequiredArgsConstructor
+@AllArgsConstructor
+@Entity
+public class Role {
+    @Id
+    @GeneratedValue
+    @JsonProperty("id")
+    private Long id;
+
+    private RolePriority priority;
+
+    @Enumerated(EnumType.STRING)
+    private RoleName roleName;
+
+    @ManyToMany
+    private List<User> users;
+
 }

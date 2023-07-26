@@ -5,7 +5,8 @@ import com.janonimo.tazma.core.reporting.Review;
 import com.janonimo.tazma.core.services.AppointmentRepository;
 import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
-import com.janonimo.tazma.user.Role;
+import com.janonimo.tazma.user.RoleName;
+import com.janonimo.tazma.user.RolePriority;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -47,9 +48,10 @@ public class ReviewService {
 
     public List<Review> reviews(String jwt){
         Token token = tokenRepository.findByToken(jwt).get();
-        if(token.getUser().getRole() == Role.CLIENT){
+        if(token.getUser().getRoles().get(0).getRoleName() == RoleName.CLIENT && token.getUser().getRoles().get(0).getPriority() == RolePriority.MAIN){
+
             return reviewRepository.findAllByClient(token.getUser().getId());
-        }else if(token.getUser().getRole() == Role.STYLIST){
+        }else if(token.getUser().getRoles().get(0).getRoleName() == RoleName.STYLIST && token.getUser().getRoles().get(0).getPriority() == RolePriority.MAIN){
             return reviewRepository.findAllOnStylist(token.getUser().getId());
         }
         return null;

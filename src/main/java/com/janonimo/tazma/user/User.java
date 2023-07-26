@@ -15,6 +15,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -77,18 +78,17 @@ public class User implements UserDetails{
     @Nullable
     private Gender gender;
 
-    @Nullable
-    @Enumerated(EnumType.STRING)
-    @JsonProperty("role")
-    private Role role;
+    @JsonProperty("roles")
+    @ManyToMany
+    private ArrayList<Role> roles;
 
     @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Appointment> appointments;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        assert role != null;
-        return List.of(new SimpleGrantedAuthority(role.name()));
+        assert roles != null;
+        return List.of(new SimpleGrantedAuthority(roles.get(0).getRoleName().name()));
     }
 
 

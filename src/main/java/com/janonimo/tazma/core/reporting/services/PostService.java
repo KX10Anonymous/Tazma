@@ -3,7 +3,8 @@ package com.janonimo.tazma.core.reporting.services;
 import com.janonimo.tazma.core.reporting.Post;
 import com.janonimo.tazma.core.reporting.Reaction;
 import com.janonimo.tazma.token.TokenRepository;
-import com.janonimo.tazma.user.Role;
+import com.janonimo.tazma.user.RoleName;
+import com.janonimo.tazma.user.RolePriority;
 import com.janonimo.tazma.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,29 +26,33 @@ public class PostService {
     public Post save(MultipartFile file, String jwt) {
         if (tokenRepository.findByToken(jwt).isPresent()) {
             User user = tokenRepository.findByToken(jwt).get().user;
-            if (user.getRole() == Role.STYLIST) {
-                String folderName = user.getEmail().toLowerCase().replace("@", "_");
-                String PATH = "C:/Users/JANONIMO/Documents/PROJECTS/Tazma/tazma-web/tazma/public/src/posts/";
-                File personalDir = new File(PATH + folderName);
-                if (!personalDir.exists()) {
-                    personalDir.mkdir();
-                }
-                String resourcePath = PATH.concat(folderName + "/" + file.getOriginalFilename());
-                Post post = new Post();
-                post.setUrl("/src/posts/" + folderName + "/" + file.getOriginalFilename());
-                post.setStylist(user);
-                post.setCreated(LocalDateTime.now());
-                post = postRepository.save(post);
-                assert post != null;
-                if (post.getId() != null) {
-                    try {
-                        file.transferTo(new File(resourcePath));
-                    } catch (IOException ex) {
-                        return null;
+            if(user.getRoles().size() > 1){
+                if ((user.getRoles().get(0).getRoleName() == RoleName.STYLIST && user.getRoles().get(0).getPriority() == RolePriority.MAIN)||
+                        ((user.getRoles().get(1).getRoleName() == RoleName.STYLIST && user.getRoles().get(1).getPriority() == RolePriority.MAIN))) {
+                    String folderName = user.getEmail().toLowerCase().replace("@", "_");
+                    String PATH = "C:/Users/JANONIMO/Documents/PROJECTS/Tazma/tazma-web/tazma/public/src/posts/";
+                    File personalDir = new File(PATH + folderName);
+                    if (!personalDir.exists()) {
+                        personalDir.mkdir();
                     }
+                    String resourcePath = PATH.concat(folderName + "/" + file.getOriginalFilename());
+                    Post post = new Post();
+                    post.setUrl("/src/posts/" + folderName + "/" + file.getOriginalFilename());
+                    post.setStylist(user);
+                    post.setCreated(LocalDateTime.now());
+                    post = postRepository.save(post);
+                    assert post != null;
+                    if (post.getId() != null) {
+                        try {
+                            file.transferTo(new File(resourcePath));
+                        } catch (IOException ex) {
+                            return null;
+                        }
+                    }
+                    return post;
                 }
-                return post;
             }
+
 
         }
         return null;
@@ -60,17 +65,20 @@ public class PostService {
     public void delete(String jwt, Post post) {
         post = Objects.requireNonNull(postRepository.findById(post.getId())).get();
         User user = tokenRepository.findByToken(jwt).get().user;
-        if (user.getRole() == Role.STYLIST) {
-            if (Objects.equals(user.getId(), post.getStylist().getId())) {
-                postRepository.delete(post);
-                File postFile = new File(post.getUrl());
-                postFile.delete();
-                List<Reaction> reactions = reactionService.findByPost(post.getId());
-                for (Reaction reaction : reactions) {
-                    reactionService.deleteReaction(reaction);
+        if(user.getRoles().size() > 1){
+            if ((user.getRoles().get(0).getRoleName() == RoleName.STYLIST && user.getRoles().get(0).getPriority() == RolePriority.MAIN)||
+                    ((user.getRoles().get(1).getRoleName() == RoleName.STYLIST && user.getRoles().get(1).getPriority() == RolePriority.MAIN))) {
+                if (Objects.equals(user.getId(), post.getStylist().getId())) {
+                    postRepository.delete(post);
+                    File postFile = new File(post.getUrl());
+                    postFile.delete();
+                    List<Reaction> reactions = reactionService.findByPost(post.getId());
+                    for (Reaction reaction : reactions) {
+                        reactionService.deleteReaction(reaction);
+                    }
                 }
             }
-        } else if (user.getRole() == Role.ADMIN) {
+        } else if (user.getRoles().get(0).getRoleName() == RoleName.ADMIN && user.getRoles().get(0).getPriority() == RolePriority.MAIN) {
             postRepository.delete(post);
             File postFile = new File(post.getUrl());
             List<Reaction> reactions = reactionService.findByPost(post.getId());

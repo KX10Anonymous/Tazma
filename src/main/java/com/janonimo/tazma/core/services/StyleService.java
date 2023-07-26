@@ -5,6 +5,7 @@ import com.janonimo.tazma.core.appointment.Style;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.janonimo.tazma.core.rest.response.StyleResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +22,7 @@ public class StyleService {
     private final StyleRepository styleRepository;
     private final ResourceService srcService;
     public Style create(Style style){
-        Style temp = styleRepository.saveAndFlush(style);
-        return temp;
+        return styleRepository.saveAndFlush(style);
     }
 
     public Style edit(Style style){
@@ -30,10 +30,7 @@ public class StyleService {
     }
 
     public Style read(Long id){
-        Style style = styleRepository.getReferenceById(id);
-       // List<Resource> resources = srcService.resourcesByStyle(id);
-      //  style.setResources(resources);
-        return style;
+        return styleRepository.getReferenceById(id);
     }
 
     public ArrayList<StyleResponse> all(){
@@ -51,18 +48,12 @@ public class StyleService {
 
     public boolean delete(Style style){
         styleRepository.delete(style);
-        return true;
+        return !styleRepository.existsById(style.getId());
     }
 
-    /**
-     *
-     * @param id
-     * @param file
-     * @return
-     */
-    public Resource uploadResource(Long id, MultipartFile file){
-        Style style =  styleRepository.findById(id).get();
-        return srcService.save(file, style);
 
+    public Resource uploadResource(Long id, MultipartFile file){
+        Style style =  Objects.requireNonNull(styleRepository.findById(id)).orElse(null);
+        return srcService.save(file, style);
     }
 }

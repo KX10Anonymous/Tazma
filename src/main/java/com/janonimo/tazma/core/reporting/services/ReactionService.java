@@ -34,9 +34,7 @@ public class ReactionService {
     public List<Reaction> findByPost(Long id){
         return reactionRepository.findByPost(id);
     }
-    public List<Reaction> getAllReactions() {
-        return reactionRepository.findAll();
-    }
+
 
     public void deleteReaction(Reaction reaction) {
         reactionRepository.delete(reaction);

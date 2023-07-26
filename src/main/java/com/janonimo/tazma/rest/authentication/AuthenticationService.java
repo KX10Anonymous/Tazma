@@ -1,25 +1,24 @@
 package com.janonimo.tazma.rest.authentication;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.janonimo.tazma.rest.config.JwtService;
 import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.token.TokenType;
 import com.janonimo.tazma.user.Role;
+import com.janonimo.tazma.user.RoleName;
+import com.janonimo.tazma.user.RolePriority;
 import com.janonimo.tazma.user.User;
 import com.janonimo.tazma.deserializer.RoleDeserializer;
 import com.janonimo.tazma.user.services.UserRepository;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import org.springframework.security.authentication.BadCredentialsException;
@@ -35,30 +34,52 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     @JsonDeserialize(using = RoleDeserializer.class)
-    private Role role;
+    private RoleName roleName;
 
     public AuthenticationResponse register(RegisterRequest request) {
         try {
-            role = Role.fromString(request.getRole().toString());
+            ArrayList<Role> roles = new ArrayList<>();
+            roleName = RoleName.fromString(request.getRoleName().toString());
+            if(roleName == RoleName.STYLIST){
+                Role r1 = Role.builder()
+                        .priority(RolePriority.MAIN)
+                        .roleName(RoleName.STYLIST)
+                    .build();
+
+                Role r2 = Role.builder()
+                        .priority(RolePriority.SECONDARY)
+                        .roleName(RoleName.CLIENT)
+                        .build();
+            }
+
+
             User user = User.builder()
                     .firstname(request.getFirstname())
                     .lastname(request.getLastname())
                     .email(request.getEmail())
                     .phone(request.getPhone())
                     .password(passwordEncoder.encode(request.getPassword()))
-                    .role(role)
+                    .roles(roles)
                     .build();
-            if(role == Role.STYLIST){
+            if(roleName == RoleName.STYLIST){
                 user.setAppointmentType(request.getType());
             }
             User newUser = repository.save(user);
             String newJwt = tokenService.generateToken(user);
             String refreshJwt = tokenService.generateRefreshToken(user);
             saveUserToken(newUser, newJwt);
+
+            String main = "";
+            for(Role r : newUser.getRoles()){
+                if(r.getPriority() == RolePriority.MAIN){
+                    main = r.getRoleName().name();
+                    break;
+                }
+            }
             return AuthenticationResponse.builder()
                     .accessToken(newJwt)
                     .refreshToken(refreshJwt)
-                    .role(user.getRole().toString())
+                    .role(main)
                     .build();
         } catch (BadCredentialsException ex) {
             return new AuthenticationResponse("", "", "");
@@ -100,10 +121,18 @@ public class AuthenticationService {
             String refreshToken = tokenService.generateRefreshToken(user);
 
             saveUserToken(user, newToken);
+
+            String main = "";
+            for(Role r : user.getRoles()){
+                if(r.getPriority() == RolePriority.MAIN){
+                    main = r.getRoleName().name();
+                    break;
+                }
+            }
             return AuthenticationResponse.builder()
                     .accessToken(newToken)
                     .refreshToken(refreshToken)
-                    .role(user.getRole().toString())
+                    .role(main)
                     .build();
         } catch (BadCredentialsException ex) {
             return new AuthenticationResponse("", "","");

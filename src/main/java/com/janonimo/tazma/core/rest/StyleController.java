@@ -7,6 +7,7 @@ import com.janonimo.tazma.core.services.StyleService;
 import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.Role;
+import com.janonimo.tazma.user.RoleName;
 import com.janonimo.tazma.user.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -71,8 +72,11 @@ public class StyleController {
     private boolean validateUserRequest(String jwt){
         Token temp = tokenRepository.findByToken(jwt).get();
         User user = tokenRepository.findByToken(jwt).get().user;
-        if(user.getRole() != Role.ADMIN)
-            return false;
+        for(Role r : user.getRoles()){
+            if(r.getRoleName() != RoleName.ADMIN)
+                return false;
+        }
+
         return !temp.isExpired();
     }
 

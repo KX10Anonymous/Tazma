@@ -6,6 +6,7 @@ import Address from "./Address/Address";
 import "./App.css";
 import Appointments from './Appointments/Appointments';
 import AppointmentForm from './Appointments/Form';
+import CreateHairdo from "./Hairdo/CreateHairdo";
 import Homepage from "./Homepage/Homepage";
 import Login from "./Login/Login";
 import Posts from "./Posts/Posts";
@@ -47,7 +48,7 @@ function App() {
       <Route path="/" element={<Homepage />} />
       <Route path="appointments" element={<Appointments/>}/>
       <Route path="address" element={<Address/>}/>
-      <Route path="hairdo"/>
+      <Route path="hairdo" element={<CreateHairdo/>}/>
       <Route path="test" element={<Test/>}/>
       <Route path="posts" element={<Posts/>}/>
       <Route path="create" element={<AppointmentForm/>}/>

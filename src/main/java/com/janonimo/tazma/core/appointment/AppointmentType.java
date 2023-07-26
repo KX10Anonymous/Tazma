@@ -1,7 +1,5 @@
 package com.janonimo.tazma.core.appointment;
 
-import com.janonimo.tazma.user.Role;
-
 public enum AppointmentType {
     CLIENT_VISIT, HOUSE_CALL;
     public static AppointmentType fromString(String value) {

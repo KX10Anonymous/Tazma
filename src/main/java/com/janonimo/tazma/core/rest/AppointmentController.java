@@ -4,15 +4,17 @@ import com.janonimo.tazma.core.appointment.Appointment;
 import com.janonimo.tazma.core.rest.response.AppointmentResponse;
 import com.janonimo.tazma.core.services.AppointmentRequest;
 import com.janonimo.tazma.core.services.AppointmentService;
-import com.janonimo.tazma.core.services.StyleRepository;
 import com.janonimo.tazma.core.services.StyleService;
 import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.Role;
+import com.janonimo.tazma.user.RoleName;
+import com.janonimo.tazma.user.RolePriority;
 import com.janonimo.tazma.user.User;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -52,14 +54,7 @@ public class AppointmentController {
 
     @GetMapping("/all/{jwt}")
     public ResponseEntity<List<AppointmentResponse>> appointments(@PathVariable String jwt) {
-        Token temp = tokenRepository.findByToken(jwt).get();
-        User user = temp.getUser();
-        if (user.getRole() == Role.CLIENT) {
-            return new ResponseEntity<>(appointmentService.clientAppointments(user.getId()), HttpStatus.OK);
-        } else if(user.getRole() == Role.STYLIST){
-            return new ResponseEntity<>(appointmentService.stylistAppointments(user.getId()), HttpStatus.OK);
-        }
-        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        return handleRole(jwt);
     }
 
     /**
@@ -91,40 +86,36 @@ public class AppointmentController {
 
     @GetMapping("/read/{jwt}")
     public ResponseEntity<Appointment> read(@PathVariable String jwt, @RequestBody Long id) {
-        if(validateUserRequest(jwt, id) == true)
+        if(validateUserRequest(jwt, id))
             return new ResponseEntity<>(appointmentService.find(id), HttpStatus.OK);
         else
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
-
-
-//   @GetMapping("/searcha/{name}")
-//    public ResponseEntity<List<Appointment>> searchActive(@PathVariable String name){
-//
-//        return new ResponseEntity<>(appointmentService.readByName(name), HttpStatus.OK);
-//    }
-    
-
-//    @GetMapping("/searchall/{name}")
-//    public ResponseEntity<List<Appointment>> searchAll(@PathVariable String name){
-//        return new ResponseEntity<>(appointmentService.readAllByName(name), HttpStatus.OK);
-//    }
-
     private boolean validateUserRequest(String jwt, Long id){
         Appointment tempAppointment = appointmentService.find(id);
         Token temp = tokenRepository.findByToken(jwt).get();
         if(!temp.isExpired() && !temp.isRevoked()){
-            if(temp.getUser().getId() == tempAppointment.getStylist().getId() || temp.getUser().getId() == tempAppointment.getClient().getId()){
-                return true;
-            }
+            return Objects.equals(temp.getUser().getId(), tempAppointment.getStylist().getId()) || temp.getUser().getId() == tempAppointment.getClient().getId();
         }
         return false;
     }
     private boolean validateUserRequest(String jwt){
         Token temp = tokenRepository.findByToken(jwt).get();
-        if(!temp.isExpired() && !temp.isRevoked()){
-            return true;
+        return !temp.isExpired() && !temp.isRevoked();
+    }
+
+    private ResponseEntity<List<AppointmentResponse>> handleRole(String jwt){
+        User user = tokenRepository.findByToken(jwt).get().user;
+        for(Role r : user.getRoles()){
+            if(r.getRoleName() == RoleName.CLIENT && r.getPriority() == RolePriority.MAIN){
+                return new ResponseEntity<>(appointmentService.clientAppointments(user.getId()), HttpStatus.OK);
+            }
+            else if(r.getRoleName() == RoleName.STYLIST && r.getPriority() == RolePriority.MAIN){
+                return new ResponseEntity<>(appointmentService.stylistAppointments(user.getId()), HttpStatus.OK);
+            }
+
         }
-        return false;
+
+        return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 }

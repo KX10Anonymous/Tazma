@@ -58,8 +58,12 @@ public class UsersController {
         Token token = tokenRepository.findByToken(jwt).get();
         if(!token.isExpired()){
             User temp = token.getUser();
-            if(temp.getRole() == Role.STYLIST)
-                temp.setAppointmentType(user.getAppointmentType());
+            for(Role r : user.getRoles()){
+                if(r.getRoleName() != RoleName.STYLIST){
+                    temp.setAppointmentType(user.getAppointmentType());
+                    break;
+                }
+            }
             temp.setGender(user.getGender());
             return new ResponseEntity<>(userService.save(temp), HttpStatus.OK);
         }

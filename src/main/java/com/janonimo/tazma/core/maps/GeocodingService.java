@@ -4,7 +4,6 @@ import com.janonimo.tazma.user.Address;
 import com.nimbusds.jose.shaded.gson.Gson;
 import com.nimbusds.jose.shaded.gson.JsonArray;
 import com.nimbusds.jose.shaded.gson.JsonObject;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -14,8 +13,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Service
 public class GeocodingService {
 
-    @Value(value = "bc278c4c52fd9388a0ecef05aecbe1d9")
-    private String accessKey;
 
     public String geocodeAddress(Address address) {
         RestTemplate restTemplate = new RestTemplate();
@@ -49,9 +46,9 @@ public class GeocodingService {
 
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
 
-        double distance = earthRadius * c;
+        return earthRadius * c;
 
-        return distance;
+
     }
 
     public double getLatitudeFromResponse(String response) {

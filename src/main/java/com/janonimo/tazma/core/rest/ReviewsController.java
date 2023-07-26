@@ -52,8 +52,6 @@ public class ReviewsController {
 
     private boolean validateUser(String jwt){
         Token token = tokenRepository.findByToken(jwt).get();
-        if(token.isRevoked() || token.isExpired())
-            return false;
-        return true;
+        return !token.isRevoked() && !token.isExpired();
     }
 }

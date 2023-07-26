@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/api/posts")
@@ -57,8 +58,8 @@ public class PostsController {
     public ResponseEntity<Reaction> rereact(@PathVariable Long id, @RequestBody ReactionRequest request){
         User user = tokenRepository.findByToken(request.getJwt()).get().getUser();
         Reaction reaction = reactionService.getReactionById(id).get();
-        if(reaction.getUser().getId() == user.getId()){
-            return new ResponseEntity<Reaction>(reactionService.saveReaction(user,reaction.getPost(),request.getReact()), HttpStatus.OK);
+        if(Objects.equals(reaction.getUser().getId(), user.getId())){
+            return new ResponseEntity<>(reactionService.saveReaction(user,reaction.getPost(),request.getReact()), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -75,9 +76,7 @@ public class PostsController {
 
     private boolean validateUser(String jwt){
         Token token = tokenRepository.findByToken(jwt).get();
-        if(token.isRevoked() || token.isExpired())
-            return false;
-        return true;
+        return !token.isRevoked() && !token.isExpired();
     }
 
 }

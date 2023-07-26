@@ -2,7 +2,7 @@ package com.janonimo.tazma.user.services;
 
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.Address;
-import com.janonimo.tazma.user.Role;
+import com.janonimo.tazma.user.RoleName;
 import com.janonimo.tazma.user.StylistStatus;
 import com.janonimo.tazma.user.User;
 
@@ -73,7 +73,7 @@ public class UserService {
     public List<User> findByStatus(String jwt){
         ArrayList<User> users = new ArrayList<>();
         for(User u : findByAddress(jwt)){
-            if(u.getStatus() == StylistStatus.AVAILABLE && u.getRole() == Role.STYLIST){
+            if(u.getStatus() == StylistStatus.AVAILABLE && u.getRoleName() == RoleName.STYLIST){
                 users.add(u);
             }
         }

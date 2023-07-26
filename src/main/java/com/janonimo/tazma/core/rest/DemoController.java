@@ -4,7 +4,6 @@ import com.github.javafaker.Faker;
 import com.janonimo.tazma.core.appointment.Appointment;
 import com.janonimo.tazma.core.appointment.AppointmentType;
 import com.janonimo.tazma.core.appointment.Style;
-import com.janonimo.tazma.core.reporting.services.PostService;
 import com.janonimo.tazma.core.services.AppointmentService;
 import com.janonimo.tazma.core.services.StyleService;
 import com.janonimo.tazma.user.*;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -27,13 +27,12 @@ import java.util.Random;
 @RequiredArgsConstructor
 public class DemoController {
     private final UserService userService;
-    private final PostService postService;
     private final StyleService styleService;
     private final AppointmentService appointmentService;
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/appointments")
-    public ResponseEntity<?> createAppoitments(){
+    public ResponseEntity<?> createAppointments(){
         List<User> stylists = userService.stylists();
         List<User> clients = userService.clients();
         for(User stylist : stylists){
@@ -79,11 +78,19 @@ public class DemoController {
             user.setLastname(lastname);
             user.setPassword(passwordEncoder.encode("123456789"));
             user.setGender(Gender.MALE);
-            user.setRole(Role.STYLIST);
+            Role role = Role.builder()
+                    .roleName(RoleName.STYLIST).priority(RolePriority.MAIN).build();
+            Role role2 = Role.builder()
+                    .roleName(RoleName.CLIENT).priority(RolePriority.SECONDARY).build();
+            ArrayList<Role> roles = new ArrayList<>();
+            roles.add(role);
+            roles.add(role2);
+
+            user.setRoles(roles);
             user.setAppointmentType(AppointmentType.HOUSE_CALL);
             user.setStatus(StylistStatus.AVAILABLE);
             Random phonerandom = new Random();
-            user.setEmail(new String(firstname+lastname).toLowerCase().trim()+"@gmail.com");
+            user.setEmail((firstname + lastname).toLowerCase().trim()+"@gmail.com");
             user.setPhone(String.valueOf(phonerandom.nextInt(1000000000,1988888881)));
 
             user = userService.save(user);
@@ -104,10 +111,7 @@ public class DemoController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("/test")
-    public String test(){
-        return "Tested";
-    }
+
     @GetMapping("/clients")
     public  ResponseEntity<?> addClients(){
 
@@ -120,10 +124,13 @@ public class DemoController {
             user.setLastname(lastname);
             user.setPassword(passwordEncoder.encode("123456789"));
             user.setGender(Gender.MALE);
-            user.setRole(Role.CLIENT);
-
+            Role role = Role.builder()
+                    .roleName(RoleName.CLIENT).priority(RolePriority.MAIN).build();
+            ArrayList<Role> roles = new ArrayList<>();
+            roles.add(role);
+            user.setRoles(roles);
             Random phonerandom = new Random();
-            user.setEmail(new String(firstname+lastname).toLowerCase().trim()+"@gmail.com");
+            user.setEmail((firstname + lastname).toLowerCase().trim()+"@gmail.com");
             user.setPhone(String.valueOf(phonerandom.nextInt(1000000000,1988888881)));
 
             user = userService.save(user);
@@ -151,10 +158,14 @@ public class DemoController {
         user.setLastname("Mamidza");
         user.setPassword(passwordEncoder.encode("123456789"));
         user.setGender(Gender.MALE);
-        user.setRole(Role.ADMIN);
+        Role role = Role.builder()
+                .roleName(RoleName.ADMIN).priority(RolePriority.MAIN).build();
+        ArrayList<Role> roles = new ArrayList<>();
+        roles.add(role);
+        user.setRoles(roles);
         Random phonerandom = new Random();
         user.setEmail("mamidzaronnie@gmail.com");
-        user.setPhone(new String(String.valueOf(phonerandom.nextInt(1000000000,1988888881))));
+        user.setPhone(String.valueOf(phonerandom.nextInt(1000000000, 1988888881)));
 
         user = userService.save(user);
 

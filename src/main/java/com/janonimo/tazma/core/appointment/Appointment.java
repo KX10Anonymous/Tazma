@@ -1,7 +1,6 @@
 package com.janonimo.tazma.core.appointment;
 
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.janonimo.tazma.core.reporting.Review;

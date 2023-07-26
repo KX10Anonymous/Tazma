@@ -70,8 +70,20 @@ const Appointments = () => {
   };
 
   const handleRating = (appointmentId, rating) => {
-    // Send rating to API or perform rating logic here
-    console.log(`Rating ${rating} for appointment with ID ${appointmentId}`);
+    
+  };
+
+  const renderStylistName = (stylist, id) =>{
+    const device = localStorage.getItem("device");
+    if(device ==="phone"){
+      return null;
+    }else{
+      <MDBBadge
+      color="info rounded-pill"
+      onClick={() => handleRating(id, "THREE")}>
+      {stylist}
+    </MDBBadge>
+    }
   };
 
   const shouldDisplayRating = (appointment) => {
@@ -92,12 +104,10 @@ const Appointments = () => {
               onClick={() => handleRating(appointment.id, "THREE")}>
               {appointment.time}
             </MDBBadge>
-            
-            <MDBBadge
-              color="info rounded-pill"
-              onClick={() => handleRating(appointment.id, "THREE")}>
-              {appointment.stylist}
-            </MDBBadge>
+            <>
+              {renderStylistName.bind(null,appointment.stylist, appointment.id)}
+            </>
+           
             <MDBBadge
               color="info rounded-pill"
               onClick={() => handleRating(appointment.id, "THREE")}>

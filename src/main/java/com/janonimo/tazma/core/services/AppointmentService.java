@@ -1,11 +1,8 @@
 package com.janonimo.tazma.core.services;
 
-import com.janonimo.tazma.core.appointment.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Logger;
-
+import com.janonimo.tazma.core.appointment.Appointment;
+import com.janonimo.tazma.core.appointment.AppointmentType;
+import com.janonimo.tazma.core.appointment.Location;
 import com.janonimo.tazma.core.maps.GeocodingService;
 import com.janonimo.tazma.core.rest.response.AppointmentResponse;
 import com.janonimo.tazma.user.Address;
@@ -13,6 +10,9 @@ import com.janonimo.tazma.user.User;
 import com.janonimo.tazma.user.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Service
@@ -22,9 +22,6 @@ public class AppointmentService {
     private final LocationService locationService;
     private final UserService userService;
     private final GeocodingService geocodingService;
-    private final ResourceService resourceService;
-    private final StyleService styleService;
-
     public Appointment find(Long id) {
         return appointmentRepo.getReferenceById(id);
     }
@@ -34,20 +31,20 @@ public class AppointmentService {
         Address clientAddress = appointment.getClient().getAddress();
 
         if (appointment.getId() == null) {
-            Double clientLongitude = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(clientAddress));
-            Double clientLatitude = geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(clientAddress));
+            double clientLongitude = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(clientAddress));
+            double clientLatitude = geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(clientAddress));
 
             List<User> stylists = userService.findByAddress(jwt);
             User appointed = stylists.get(0);
-            Double shortestDistance = geocodingService.calculateDistance(
+            double shortestDistance = geocodingService.calculateDistance(
                     clientLatitude, clientLongitude,
                     geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(stylists.get(0).getAddress())),
                     geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(stylists.get(0).getAddress()))
             );
             for (User stylist : stylists) {
-                Double styLongitude = geocodingService.getLongitudeFromResponse(
+                double styLongitude = geocodingService.getLongitudeFromResponse(
                         geocodingService.geocodeAddress(stylist.getAddress()));
-                Double styLatitude = geocodingService.getLatitudeFromResponse(
+                double styLatitude = geocodingService.getLatitudeFromResponse(
                         geocodingService.geocodeAddress(stylist.getAddress()));
                 if (geocodingService.calculateDistance(clientLatitude, clientLongitude, styLatitude, styLongitude) <= shortestDistance) {
                     if (appointment.getAppointmentType() == appointment.getAppointmentType()) {
@@ -56,10 +53,10 @@ public class AppointmentService {
                     }
                 }
             }
-            if (appointment.getAppointmentType() == AppointmentType.CLIENT_VISIT) {
+            if(appointment.getAppointmentType() == AppointmentType.CLIENT_VISIT) {
                 Location temp = new Location();
-                Double lat = geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(appointment.getClient().getAddress()));
-                Double lon = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(appointment.getClient().getAddress()));
+                double lat = geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(appointment.getClient().getAddress()));
+                double lon = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(appointment.getClient().getAddress()));
                 temp.setLatitude(lat);
                 temp.setLongitude(lon);
                 temp.setLocationName(clientAddress.getProvince() + " " + clientAddress.getArea() + " " + clientAddress.getStreetName());
@@ -67,8 +64,8 @@ public class AppointmentService {
                 appointment.setLocation(loc);
             } else {
                 Location temp = new Location();
-                Double lat = geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(appointed.getAddress()));
-                Double lon = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(appointed.getAddress()));
+                double lat = geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(appointed.getAddress()));
+                double lon = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(appointed.getAddress()));
                 temp.setLatitude(lat);
                 temp.setLongitude(lon);
                 temp.setLocationName(clientAddress.getProvince() + " " + clientAddress.getArea() + " " + clientAddress.getStreetName());
@@ -108,9 +105,7 @@ public class AppointmentService {
     private ArrayList<AppointmentResponse> getAppointments(ArrayList<Appointment> appointments) {
         ArrayList<AppointmentResponse> response = new ArrayList<>();
         for (Appointment appointment : appointments) {
-            Logger logger = Logger.getLogger(AppointmentService.class.getName());
-            // logger.info(appointment.getStylist().getFirstname());
-            //Resource resource = resourceService.resourcesByStyle(style.getId()).get(0);
+
             if (appointment.getId() != null && appointment.getClient() != null &&
                     appointment.getAppointmentTime() != null && appointment.getStylist() != null
                     && appointment.getAppointmentType() != null && appointment.getStyle() != null) {
@@ -134,22 +129,6 @@ public class AppointmentService {
         }
         return response;
     }
-//    public List<Appointment> readByName(String name){
-//        ArrayList<Appointment> list= new ArrayList<>();
-//        for(Location loc : locationService.findByName(name)){
-//            list.add(loc.getAppointments());
-//        }
-//        return list;
-//    }
-
-//    public List<Appointment> readAllByName(String name){
-//        ArrayList<Appointment> list= new ArrayList<>();
-//        for(Location loc : locationService.findAllByName(name)){
-//            list.add(loc.getAppointment());
-//        }
-//        return list;
-//    }
-
 
 }
 

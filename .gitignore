@@ -44,3 +44,5 @@ tazma-mobile/ios/
 
 ### React###
 tazma-web/node_modules/
+tazma-web/tazma/public/components/
+tazma-web/tazma/public/src/

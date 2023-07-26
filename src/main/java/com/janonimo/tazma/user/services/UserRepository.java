@@ -20,24 +20,24 @@ public interface UserRepository extends JpaRepository<User, Long> {
     
     @Query(value="""
                    select a from User a where a.address.area = :town
-                   and a.role = 'STYLIST' and a.address.province = :province
+                   and a.roleName = 'STYLIST' and a.address.province = :province
            """)
     List<User> findByAddress(String town, String province);
 
     @Query(value="""
                    select a from User a where a.firstname = :firstname
-                   and a.role = 'STYLIST' and a.lastname = :lastname and a.address.area =:town
+                   and a.roleName = 'STYLIST' and a.lastname = :lastname and a.address.area =:town
            """)
     List<User>findByNames(String firstname, String lastname, String town);
 
     @Query(value="""
                    select a from User a where
-                   a.role = 'CLIENT'
+                   a.roleName = 'CLIENT'
            """)
     List<User> clients();
     @Query(value="""
                    select a from User a where
-                   a.role = 'STYLIST'
+                   a.roleName = 'STYLIST'
            """)
     List<User> stylists();
 
