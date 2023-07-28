@@ -1,13 +1,12 @@
 package com.janonimo.tazma.rest.authentication;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import com.janonimo.tazma.rest.dto.AuthenticationResponse;
+import com.janonimo.tazma.rest.dto.LoginRequest;
+import com.janonimo.tazma.rest.dto.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/auth")

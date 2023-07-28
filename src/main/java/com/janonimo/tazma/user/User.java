@@ -79,8 +79,16 @@ public class User implements UserDetails{
     private Gender gender;
 
     @JsonProperty("roles")
-    @ManyToMany
-    private ArrayList<Role> roles;
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch=FetchType.EAGER)
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"), inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"))
+    private List<Role> roles;
+
+    public void addRole(Role role){
+        if (roles == null) {
+            roles = new ArrayList<>();
+        }
+        roles.add(role);
+    }
 
     @JsonBackReference
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -88,7 +96,14 @@ public class User implements UserDetails{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         assert roles != null;
-        return List.of(new SimpleGrantedAuthority(roles.get(0).getRoleName().name()));
+        if(roles.size() > 0){
+            for(Role r : roles){
+                if(r.getPriority() == RolePriority.MAIN){
+                    return List.of(new SimpleGrantedAuthority(r.getRoleName().name()));
+                }
+            }
+        }
+        return null;
     }
 
 

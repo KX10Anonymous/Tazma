@@ -34,15 +34,18 @@ public class StyleService {
     }
 
     public ArrayList<StyleResponse> all(){
-        List<Style> styles = styleRepository.findAll();
         ArrayList<StyleResponse> response = new ArrayList<>();
-        for(Style style : styles){
-            StyleResponse res = new StyleResponse();
-            res.setId(style.getId());
-            res.setTitle(style.getStyleName());
-            res.setUrl(srcService.findByStyle(style.getId()).getPath());
-            response.add(res);
+        List<Style> styles = styleRepository.findAll();
+        if(styles != null){
+            for(Style style : styles){
+                StyleResponse res = new StyleResponse();
+                res.setId(style.getId());
+                res.setTitle(style.getStyleName());
+                res.setUrl(srcService.findByStyle(style.getId()).getPath());
+                response.add(res);
+            }
         }
+
         return response;
     }
 

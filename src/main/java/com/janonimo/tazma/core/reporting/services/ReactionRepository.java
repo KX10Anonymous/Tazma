@@ -8,8 +8,8 @@ import java.util.List;
 
 public interface ReactionRepository extends JpaRepository<Reaction, Long> {
     @Query(value = """
-      select r from Reaction r 
-      where r.post.Id = :id 
+      select r from Reaction r
+      where r.post.Id = :id
       """)
     List<Reaction> findByPost(Long id);
 }

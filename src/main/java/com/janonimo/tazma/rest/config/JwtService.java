@@ -3,7 +3,6 @@ package com.janonimo.tazma.rest.config;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -95,16 +94,16 @@ public class JwtService {
 
     private Key getSignInKey() {
         byte[] keyBytes = secretKey.getBytes(StandardCharsets.UTF_8);
-        byte[] hashedBytes = hashKey(keyBytes, "SHA-256");
+        byte[] hashedBytes = hashKey(keyBytes);
         return new SecretKeySpec(hashedBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 
-    private byte[] hashKey(byte[] keyBytes, String algorithm) {
+    private byte[] hashKey(byte[] keyBytes) {
         try {
-            MessageDigest digest = MessageDigest.getInstance(algorithm);
+            MessageDigest digest = MessageDigest.getInstance("SHA-256");
             return digest.digest(keyBytes);
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException("Invalid Algorithm: " + algorithm, e);
+            throw new IllegalArgumentException("Invalid Algorithm: " + "SHA-256", e);
         }
     }
 }

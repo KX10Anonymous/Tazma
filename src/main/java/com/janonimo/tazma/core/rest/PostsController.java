@@ -48,7 +48,7 @@ public class PostsController {
 
     @PostMapping("/react")
     public ResponseEntity<Reaction> react(@RequestBody ReactionRequest request){
-        User user = tokenRepository.findByToken(request.getJwt()).get().getUser();
+        User user = Objects.requireNonNull(tokenRepository.findByToken(request.getJwt()).orElse(null)).getUser();
         Post post = postService.read(request.getPostId());
         Reaction reaction = reactionService.saveReaction(user, post, request.getReact());
         return new ResponseEntity<>(reaction, HttpStatus.OK);
@@ -56,8 +56,8 @@ public class PostsController {
 
     @PutMapping("/rereact/{id}")
     public ResponseEntity<Reaction> rereact(@PathVariable Long id, @RequestBody ReactionRequest request){
-        User user = tokenRepository.findByToken(request.getJwt()).get().getUser();
-        Reaction reaction = reactionService.getReactionById(id).get();
+        User user = Objects.requireNonNull(tokenRepository.findByToken(request.getJwt()).orElse(null)).getUser();
+        Reaction reaction = Objects.requireNonNull(reactionService.getReactionById(id).orElse(null));
         if(Objects.equals(reaction.getUser().getId(), user.getId())){
             return new ResponseEntity<>(reactionService.saveReaction(user,reaction.getPost(),request.getReact()), HttpStatus.OK);
         }
@@ -75,7 +75,7 @@ public class PostsController {
     }
 
     private boolean validateUser(String jwt){
-        Token token = tokenRepository.findByToken(jwt).get();
+        Token token = Objects.requireNonNull(tokenRepository.findByToken(jwt).orElse(null));
         return !token.isRevoked() && !token.isExpired();
     }
 

@@ -12,5 +12,5 @@ public interface AddressRepository extends JpaRepository<Address, Long> {
       on a.user.Id = u.Id\s
       where a.user.Id = :id
       """)
-    public Optional<Address> getUserAddress(Long id);
+    Optional<Address> getUserAddress(Long id);
 }

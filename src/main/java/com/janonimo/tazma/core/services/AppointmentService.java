@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+@SuppressWarnings("unused")
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
@@ -22,6 +23,7 @@ public class AppointmentService {
     private final LocationService locationService;
     private final UserService userService;
     private final GeocodingService geocodingService;
+
     public Appointment find(Long id) {
         return appointmentRepo.getReferenceById(id);
     }
@@ -34,18 +36,21 @@ public class AppointmentService {
             double clientLongitude = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(clientAddress));
             double clientLatitude = geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(clientAddress));
 
-            List<User> stylists = userService.findByAddress(jwt);
+            List<User> stylists = userService.findByAddress(jwt,1);
+            if(stylists == null || stylists.isEmpty()){
+                stylists = userService.findByAddress(jwt, 2);
+            }else{
+                stylists = userService.findByAddress(jwt, 3);
+            }
+            if (stylists == null || stylists.size() < 1) {
+                return null;
+            }
             User appointed = stylists.get(0);
-            double shortestDistance = geocodingService.calculateDistance(
-                    clientLatitude, clientLongitude,
-                    geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(stylists.get(0).getAddress())),
-                    geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(stylists.get(0).getAddress()))
-            );
+
+            double shortestDistance = geocodingService.calculateDistance(clientLatitude, clientLongitude, geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(stylists.get(0).getAddress())), geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(stylists.get(0).getAddress())));
             for (User stylist : stylists) {
-                double styLongitude = geocodingService.getLongitudeFromResponse(
-                        geocodingService.geocodeAddress(stylist.getAddress()));
-                double styLatitude = geocodingService.getLatitudeFromResponse(
-                        geocodingService.geocodeAddress(stylist.getAddress()));
+                double styLongitude = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(stylist.getAddress()));
+                double styLatitude = geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(stylist.getAddress()));
                 if (geocodingService.calculateDistance(clientLatitude, clientLongitude, styLatitude, styLongitude) <= shortestDistance) {
                     if (appointment.getAppointmentType() == appointment.getAppointmentType()) {
                         appointed = stylist;
@@ -53,7 +58,7 @@ public class AppointmentService {
                     }
                 }
             }
-            if(appointment.getAppointmentType() == AppointmentType.CLIENT_VISIT) {
+            if (appointment.getAppointmentType() == AppointmentType.CLIENT_VISIT) {
                 Location temp = new Location();
                 double lat = geocodingService.getLatitudeFromResponse(geocodingService.geocodeAddress(appointment.getClient().getAddress()));
                 double lon = geocodingService.getLongitudeFromResponse(geocodingService.geocodeAddress(appointment.getClient().getAddress()));
@@ -79,8 +84,8 @@ public class AppointmentService {
     }
 
 
-    public Appointment create(Appointment appointment) {
-        return appointmentRepo.save(appointment);
+    public void create(Appointment appointment) {
+        appointmentRepo.save(appointment);
     }
 
     public Appointment edit(String jwt, Appointment appointment) {
@@ -105,26 +110,11 @@ public class AppointmentService {
     private ArrayList<AppointmentResponse> getAppointments(ArrayList<Appointment> appointments) {
         ArrayList<AppointmentResponse> response = new ArrayList<>();
         for (Appointment appointment : appointments) {
-
-            if (appointment.getId() != null && appointment.getClient() != null &&
-                    appointment.getAppointmentTime() != null && appointment.getStylist() != null
-                    && appointment.getAppointmentType() != null && appointment.getStyle() != null) {
-                AppointmentResponse r = AppointmentResponse.builder()
-                        .id(appointment.getId())
-                        .client(appointment.getClient().getFirstname() + " " +
-                                appointment.getClient().getLastname())
-                        .time(appointment.getAppointmentTime().toString())
-                        .agreed(appointment.getAgreedAmount())
-                        .counter(appointment.getCounterOffer())
-                        .url("")
-                        .stylist(appointment.getStylist().getFirstname() + " " +
-                                appointment.getStylist().getLastname())
-                        .offer(appointment.getClientOffer())
-                        .type(appointment.getAppointmentType())
-                        .location("")
-                        .status(appointment.getStatus()).build();
-                response.add(r);
+            if (appointment.getId() == null || appointment.getClient() == null || appointment.getAppointmentTime() == null || appointment.getStylist() == null || appointment.getAppointmentType() == null || appointment.getStyle() == null) {
+                continue;
             }
+            AppointmentResponse r = AppointmentResponse.builder().id(appointment.getId()).client(appointment.getClient().getFirstname() + " " + appointment.getClient().getLastname()).time(appointment.getAppointmentTime().toString()).agreed(appointment.getAgreedAmount()).counter(appointment.getCounterOffer()).url("").stylist(appointment.getStylist().getFirstname() + " " + appointment.getStylist().getLastname()).offer(appointment.getClientOffer()).type(appointment.getAppointmentType()).location("").status(appointment.getStatus()).build();
+            response.add(r);
 
         }
         return response;

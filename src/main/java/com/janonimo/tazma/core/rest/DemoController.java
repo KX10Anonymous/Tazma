@@ -7,6 +7,7 @@ import com.janonimo.tazma.core.appointment.Style;
 import com.janonimo.tazma.core.services.AppointmentService;
 import com.janonimo.tazma.core.services.StyleService;
 import com.janonimo.tazma.user.*;
+import com.janonimo.tazma.user.services.RoleRepository;
 import com.janonimo.tazma.user.services.UserService;
 import com.janonimo.tazma.util.TownTyposCorrector;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 @RestController
@@ -30,6 +31,7 @@ public class DemoController {
     private final StyleService styleService;
     private final AppointmentService appointmentService;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @GetMapping("/appointments")
     public ResponseEntity<?> createAppointments(){
@@ -82,19 +84,17 @@ public class DemoController {
                     .roleName(RoleName.STYLIST).priority(RolePriority.MAIN).build();
             Role role2 = Role.builder()
                     .roleName(RoleName.CLIENT).priority(RolePriority.SECONDARY).build();
-            ArrayList<Role> roles = new ArrayList<>();
-            roles.add(role);
-            roles.add(role2);
-
-            user.setRoles(roles);
+            user.addRole(role);
+            user.addRole(role2);
             user.setAppointmentType(AppointmentType.HOUSE_CALL);
             user.setStatus(StylistStatus.AVAILABLE);
             Random phonerandom = new Random();
             user.setEmail((firstname + lastname).toLowerCase().trim()+"@gmail.com");
             user.setPhone(String.valueOf(phonerandom.nextInt(1000000000,1988888881)));
-
             user = userService.save(user);
-
+            role.addUser(user);
+            roleRepository.saveAndFlush(role);
+            role2.addUser(user);
             Random random = new Random();
             int randomIndex = random.nextInt(TownTyposCorrector.GAUTENG_NEIGHBORHOODS.size());
             String area = TownTyposCorrector.GAUTENG_NEIGHBORHOODS.get(randomIndex);
@@ -124,17 +124,15 @@ public class DemoController {
             user.setLastname(lastname);
             user.setPassword(passwordEncoder.encode("123456789"));
             user.setGender(Gender.MALE);
-            Role role = Role.builder()
-                    .roleName(RoleName.CLIENT).priority(RolePriority.MAIN).build();
-            ArrayList<Role> roles = new ArrayList<>();
-            roles.add(role);
-            user.setRoles(roles);
+            Role r1 = Objects.requireNonNull(roleRepository.findByPriority("CLIENT", "MAIN").orElse(null));
+            user.addRole(r1);
             Random phonerandom = new Random();
             user.setEmail((firstname + lastname).toLowerCase().trim()+"@gmail.com");
-            user.setPhone(String.valueOf(phonerandom.nextInt(1000000000,1988888881)));
+            user.setPhone(String.valueOf(phonerandom.nextInt(1000000000,1978888881)));
 
             user = userService.save(user);
-
+            r1.addUser(user);
+            roleRepository.saveAndFlush(r1);
             Random random = new Random();
             int randomIndex = random.nextInt(TownTyposCorrector.GAUTENG_NEIGHBORHOODS.size());
             String area = TownTyposCorrector.GAUTENG_NEIGHBORHOODS.get(randomIndex);
@@ -154,25 +152,21 @@ public class DemoController {
     public  ResponseEntity<?> admin(){
         User user = new User();
 
-        user.setFirstname("Ronnie");
+        user.setFirstname("Nyadzai");
         user.setLastname("Mamidza");
         user.setPassword(passwordEncoder.encode("123456789"));
         user.setGender(Gender.MALE);
-        Role role = Role.builder()
-                .roleName(RoleName.ADMIN).priority(RolePriority.MAIN).build();
-        ArrayList<Role> roles = new ArrayList<>();
-        roles.add(role);
-        user.setRoles(roles);
+        Role r1 = Objects.requireNonNull(roleRepository.findAdmin().orElse(null));
+        user.addRole(r1);
         Random phonerandom = new Random();
-        user.setEmail("mamidzaronnie@gmail.com");
-        user.setPhone(String.valueOf(phonerandom.nextInt(1000000000, 1988888881)));
-
+        user.setEmail("mami@gmail.com");
+        user.setPhone(String.valueOf(phonerandom.nextInt(1000000000, 1928888881)));
         user = userService.save(user);
-
+        r1.addUser(user);
+        roleRepository.saveAndFlush(r1);
         Random random = new Random();
         int randomIndex = random.nextInt(TownTyposCorrector.GAUTENG_NEIGHBORHOODS.size());
         String area = TownTyposCorrector.GAUTENG_NEIGHBORHOODS.get(randomIndex);
-
         Address address = new Address();
         address.setProvince("Gauteng");
         address.setHouseNumber("4757");
@@ -180,8 +174,6 @@ public class DemoController {
         address.setSuburb(area);
         address.setStreetName("Zwane Street");
         userService.save(user, address);
-
-
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }

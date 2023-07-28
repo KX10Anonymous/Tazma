@@ -1,3 +1,4 @@
+import Add from "@mui/icons-material/Add";
 import AspectRatio from "@mui/joy/AspectRatio";
 import Card from "@mui/joy/Card";
 import CardContent from "@mui/joy/CardContent";
@@ -5,6 +6,7 @@ import CardOverflow from "@mui/joy/CardOverflow";
 import Divider from "@mui/joy/Divider";
 import Link from "@mui/joy/Link";
 import Typography from "@mui/joy/Typography";
+import { IconButton } from "@mui/material";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
 import Dialog from "@mui/material/Dialog";
@@ -21,8 +23,6 @@ import dayjs from "dayjs";
 import React, { useEffect, useState } from "react";
 import { useUser } from "../UserProvider";
 import CreateHairdo from "./CreateHairdo";
-import {Add} from "@mui/icons-material/Add";
-import { IconButton } from "@mui/material";
 
 const Hairdo = () => {
   const currentDate = dayjs();

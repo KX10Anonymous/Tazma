@@ -1,4 +1,4 @@
-package com.janonimo.tazma.rest.authentication;
+package com.janonimo.tazma.rest.dto;
 
 import com.janonimo.tazma.core.appointment.AppointmentType;
 import com.janonimo.tazma.user.Gender;

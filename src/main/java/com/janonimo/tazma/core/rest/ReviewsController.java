@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Objects;
+
 @RequestMapping("/api/reviews")
 @RestController
 @RequiredArgsConstructor
@@ -51,7 +53,7 @@ public class ReviewsController {
     }
 
     private boolean validateUser(String jwt){
-        Token token = tokenRepository.findByToken(jwt).get();
+        Token token = Objects.requireNonNull(tokenRepository.findByToken(jwt).orElse(null));
         return !token.isRevoked() && !token.isExpired();
     }
 }

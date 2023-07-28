@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Objects;
 
 @Component
 @RequiredArgsConstructor
@@ -31,8 +32,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain
     ) throws ServletException, IOException {
-        if (request.getServletPath().contains("/api/authentication")) {
-            filterChain.doFilter(request, response);
+        if (Objects.requireNonNull(request).getServletPath().contains("/api/authentication")) {
+            Objects.requireNonNull(filterChain).doFilter(request, response);
             return;
         }
 
@@ -41,7 +42,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         final String userEmail;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request, response);
+            Objects.requireNonNull(filterChain).doFilter(request, response);
             return;
         }
 
@@ -74,6 +75,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             }
         }
 
-        filterChain.doFilter(request, response);
+        Objects.requireNonNull(filterChain).doFilter(request, response);
     }
 }

@@ -18,7 +18,7 @@ public class LocationService {
     
 
     public Location read(Long id){
-        return Objects.requireNonNull(locationRepository.findById(id)).get();
+        return Objects.requireNonNull(locationRepository.findById(id)).orElse(null);
     }
 
     public Location create(Location location){

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -39,17 +40,18 @@ public class ReviewService {
         return create(jwt, review);
     }
     private boolean validateUser(String jwt, Review review){
-        Token token = tokenRepository.findByToken(jwt).get();
-        Appointment appointment = appointmentRepository.findById(review.getAppointment().getId()).get();
-        if(token.getUser().getId() != appointment.getClient().getId())
-            return false;
+        Token token = Objects.requireNonNull(tokenRepository.findByToken(jwt).orElse(null));
+        Appointment appointment = Objects.requireNonNull(appointmentRepository.findById(review.getAppointment().getId())).orElse(null);
+        if(appointment != null){
+            return Objects.equals(token.getUser().getId(), appointment.getClient().getId());
+        }
         return true;
     }
 
     public List<Review> reviews(String jwt){
-        Token token = tokenRepository.findByToken(jwt).get();
-        if(token.getUser().getRoles().get(0).getRoleName() == RoleName.CLIENT && token.getUser().getRoles().get(0).getPriority() == RolePriority.MAIN){
+        Token token = Objects.requireNonNull(tokenRepository.findByToken(jwt).orElse(null));
 
+        if(token.getUser().getRoles().get(0).getRoleName() == RoleName.CLIENT && token.getUser().getRoles().get(0).getPriority() == RolePriority.MAIN){
             return reviewRepository.findAllByClient(token.getUser().getId());
         }else if(token.getUser().getRoles().get(0).getRoleName() == RoleName.STYLIST && token.getUser().getRoles().get(0).getPriority() == RolePriority.MAIN){
             return reviewRepository.findAllOnStylist(token.getUser().getId());

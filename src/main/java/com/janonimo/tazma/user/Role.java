@@ -6,12 +6,12 @@ import com.janonimo.tazma.user.User;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @Builder
 @Table(name = "roles")
-@NoArgsConstructor
 @RequiredArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -21,12 +21,19 @@ public class Role {
     @JsonProperty("id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     private RolePriority priority;
 
     @Enumerated(EnumType.STRING)
     private RoleName roleName;
 
-    @ManyToMany
+    @ManyToMany(mappedBy = "roles")
     private List<User> users;
 
+    public void addUser(User user){
+        if(users == null){
+            users = new ArrayList<>();
+        }
+        users.add(user);
+    }
 }

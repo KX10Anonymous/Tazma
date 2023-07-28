@@ -1,6 +1,7 @@
 
 package com.janonimo.tazma.rest.authentication;
 
+import com.janonimo.tazma.rest.dto.ContactValidationResponse;
 import com.janonimo.tazma.token.Token;
 import com.janonimo.tazma.token.TokenRepository;
 import com.janonimo.tazma.user.*;
@@ -33,9 +34,11 @@ public class UsersController {
     }
 
     private ResponseEntity<Address> getUserResponseEntity(@PathVariable String jwt, @RequestBody Address address) {
-        Token token = tokenRepository.findByToken(jwt).get();
-        if(!token.isExpired()){
-            return new ResponseEntity<>(userService.save(jwt, address), HttpStatus.OK);
+        Token token = tokenRepository.findByToken(jwt).orElse(null);
+        if(token != null){
+            if(!token.isExpired()){
+                return new ResponseEntity<>(userService.save(jwt, address), HttpStatus.OK);
+            }
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -46,26 +49,30 @@ public class UsersController {
     }
     @PostMapping("/edit/{jwt}")
     public ResponseEntity<User> edit(@PathVariable String jwt,@RequestBody User user){
-        Token token = tokenRepository.findByToken(jwt).get();
-        if(!token.isExpired()){
-            return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+        Token token = tokenRepository.findByToken(jwt).orElse(null);
+        if(token != null){
+            if(!token.isExpired()){
+                return new ResponseEntity<>(userService.save(user), HttpStatus.OK);
+            }
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
 
     @PostMapping("/type-edit/{jwt}")
     public ResponseEntity<User> editType(@PathVariable String jwt,@RequestBody User user){
-        Token token = tokenRepository.findByToken(jwt).get();
-        if(!token.isExpired()){
-            User temp = token.getUser();
-            for(Role r : user.getRoles()){
-                if(r.getRoleName() != RoleName.STYLIST){
-                    temp.setAppointmentType(user.getAppointmentType());
-                    break;
+        Token token = tokenRepository.findByToken(jwt).orElse(null);
+        if(token != null){
+            if(!token.isExpired()){
+                User temp = token.getUser();
+                for(Role r : user.getRoles()){
+                    if(r.getRoleName() != RoleName.STYLIST){
+                        temp.setAppointmentType(user.getAppointmentType());
+                        break;
+                    }
                 }
+                temp.setGender(user.getGender());
+                return new ResponseEntity<>(userService.save(temp), HttpStatus.OK);
             }
-            temp.setGender(user.getGender());
-            return new ResponseEntity<>(userService.save(temp), HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
@@ -91,7 +98,7 @@ public class UsersController {
     
      @GetMapping("/location/{jwt}")
     public ResponseEntity<?> usersByLocation(@PathVariable String jwt){
-        return new ResponseEntity<>(userService.findByAddress(jwt), HttpStatus.OK);
+        return new ResponseEntity<>(userService.findByAddress(jwt,1), HttpStatus.OK);
     }
 
 }

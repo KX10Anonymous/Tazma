@@ -29,14 +29,6 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-         String[] ENDPOINTS_WHITELIST = {
-                "/**/*.css",
-                 "/**/*.js",
-                "/",
-                "/login",
-                "/register",
-                 "/**/*.less"
-        };
         http
                 .csrf().disable()
                 .authorizeHttpRequests()

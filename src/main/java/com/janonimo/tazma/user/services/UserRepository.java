@@ -1,48 +1,52 @@
-
 package com.janonimo.tazma.user.services;
-
-import java.util.List;
-import java.util.Optional;
 
 import com.janonimo.tazma.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
- *
  * @author JANONIMO
  */
 public interface UserRepository extends JpaRepository<User, Long> {
-    @Query(value="""
-                   select a from User a where a.email = :email
-           """)
+    @Query(value = """
+                    select a from User a where a.email = :email
+            """)
     Optional<User> findByEmail(String email);
-    
-    @Query(value="""
-                   select a from User a where a.address.area = :town
-                   and a.roleName = 'STYLIST' and a.address.province = :province
-           """)
+
+    @Query(value = """
+                    select a from User a join Role
+                    r on r.roleName = 'STYLIST' where a.address.area = :town
+                     and a.address.province = :province
+            """)
     List<User> findByAddress(String town, String province);
 
-    @Query(value="""
-                   select a from User a where a.firstname = :firstname
-                   and a.roleName = 'STYLIST' and a.lastname = :lastname and a.address.area =:town
-           """)
-    List<User>findByNames(String firstname, String lastname, String town);
+    @Query(value = """
+                    select a from User a join Role
+                    r on r.roleName = 'STYLIST' where a.address.area = :town
+                     and a.address.province = :province and a.address.suburb = :suburb
+            """)
+    List<User> findByAddress(String town, String province, String suburb);
 
-    @Query(value="""
-                   select a from User a where
-                   a.roleName = 'CLIENT'
-           """)
+    @Query(value = """
+                    select a from User a join Role
+                    r on r.roleName = 'STYLIST' where
+                     a.address.province = :province
+            """)
+    List<User> findByAddress(String province);
+    @Query(value = """
+                     select a from User a join Role
+                    r on r.roleName = 'CLIENT'
+            """)
     List<User> clients();
-    @Query(value="""
-                   select a from User a where
-                   a.roleName = 'STYLIST'
-           """)
+
+    @Query(value = """
+                   select a from User a join Role
+                   r on r.roleName = 'STYLIST'
+            """)
     List<User> stylists();
 
-    @Query(value="""
-                   select a from User a where a.phone = :phone
-           """)
-    public Optional<User> findByPhone(String phone);
+
 }

@@ -10,6 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.Objects;
+
 @Service
 public class GeocodingService {
 
@@ -23,15 +25,17 @@ public class GeocodingService {
         String ext = "json";
         String apiKey = "GaOeN69sWgGEIKbea3uUftnOFXd2ONMA";
 
-        String url = UriComponentsBuilder.newInstance()
-                .scheme("https")
-                .host(baseURL)
-                .pathSegment("search", versionNumber, "geocode", query + "." + ext)
-                .queryParam("key", apiKey)
-                .build()
+        String url = Objects.requireNonNull(Objects.requireNonNull(
+                Objects.requireNonNull(Objects.requireNonNull(Objects.requireNonNull(UriComponentsBuilder.newInstance()
+                                                        .scheme("https"))
+                                                .host(baseURL))
+                                        .pathSegment("search", versionNumber, "geocode", query + "." + ext))
+                                .queryParam("key", apiKey))
+                        .build())
                 .toString();
 
         ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+        assert response != null;
         return response.getBody();
     }
     public double calculateDistance(double lat1, double lon1, double lat2, double lon2) {
@@ -50,6 +54,7 @@ public class GeocodingService {
 
 
     }
+
 
     public double getLatitudeFromResponse(String response) {
         double latitude = 0.0;

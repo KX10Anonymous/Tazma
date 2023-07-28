@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -46,7 +47,6 @@ public class StyleController {
     public ResponseEntity<List<StyleResponse>> styles(){
         return new ResponseEntity<>(styleService.all(), HttpStatus.OK);
     }
-    
 
     @PutMapping("/edit/{jwt}")
     public ResponseEntity<Style> edit(@PathVariable String jwt, @RequestBody Style style){
@@ -70,13 +70,12 @@ public class StyleController {
     }
 
     private boolean validateUserRequest(String jwt){
-        Token temp = tokenRepository.findByToken(jwt).get();
-        User user = tokenRepository.findByToken(jwt).get().user;
+        Token temp = Objects.requireNonNull(tokenRepository.findByToken(jwt).orElse(null));
+        User user = temp.getUser();
         for(Role r : user.getRoles()){
             if(r.getRoleName() != RoleName.ADMIN)
                 return false;
         }
-
         return !temp.isExpired();
     }
 

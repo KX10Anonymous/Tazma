@@ -1,4 +1,4 @@
-package com.janonimo.tazma.rest.authentication;
+package com.janonimo.tazma.rest.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;

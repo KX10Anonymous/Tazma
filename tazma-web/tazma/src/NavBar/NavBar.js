@@ -1,23 +1,30 @@
-
 import AccountCircle from '@mui/icons-material/AccountCircle';
+import CloseIcon from '@mui/icons-material/Close';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MailIcon from '@mui/icons-material/Mail';
 import MenuIcon from '@mui/icons-material/Menu';
+import MinimizeIcon from '@mui/icons-material/Minimize';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import SearchIcon from '@mui/icons-material/Search';
+import { ClickAwayListener, Divider, Paper, Popper } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
+import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import InputBase from '@mui/material/InputBase';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import { alpha, styled } from '@mui/material/styles';
 import * as React from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../UserProvider';
 
@@ -62,25 +69,115 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function NavBar() {
-  const  user  = useUser();
+  const user = useUser();
   const navigate = useNavigate();
-  const [isLoggedIn, setIsLoggedIn] = React.useState(false)
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
+  const [notifications, setNotifications] = useState([]);
+  const [conversations, setConversations] = useState([]);
+  const [notificationsCount, setNotificationsCount] = useState(0);
+  const [showConversations, setShowConversations] = useState(false);
+  const [selectedChat, setSelectedChat] = useState(null);
+  const [showChat, setShowChat] = useState(false);
+  const conversationsRef = React.useRef(null);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  React.useEffect(() => {
+
+  const handleShowConversations = () => {
+    setShowConversations((prev) => !prev);
+  };
+
+  const handleShowChat = (chat) => {
+    setSelectedChat(chat);
+    setShowChat(true);
+  };
+
+  const handleMinimizeChat = () => {
+    setShowChat(false);
+  };
+
+  const handleCloseChat = () => {
+    setSelectedChat(null);
+    setShowChat(false);
+  };
+
+  
+  const fetchConversations = React.useCallback(async () => {
+    try {
+      const response = await fetch('YOUR_API_ENDPOINT', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user.jwt}`
+        },
+      });
+      const data = await response.json();
+      return data.conversations; 
+    } catch (error) {
+      console.error('Failed to fetch conversations', error);
+      return [];
+    }
+  }, [user.jwt]);
+
+  useEffect(() => {
     const checkLogin = () => {
-      if(user.jwt.length < 1){
+      if (user.jwt.length < 1) {
         setIsLoggedIn(false);
-      }else{
+      } else {
         setIsLoggedIn(true);
       }
     };
 
     checkLogin();
-  },[user,navigate] );
+  }, [user, navigate]);
+
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchConversations().then((conversations) => {
+        setConversations(conversations);
+      });
+    }
+  }, [isLoggedIn, fetchConversations]);
+
+
+  useEffect(() => {
+    const checkLogin = () => {
+      if (user.jwt.length < 1) {
+        setIsLoggedIn(false);
+      } else {
+        setIsLoggedIn(true);
+      }
+    };
+
+    checkLogin();
+  }, [user, navigate]);
+
+  // Fetch notifications count from API
+  useEffect(() => {
+    const fetchNotificationsCount = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/tazma/api/notifications/count', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${user.jwt}`
+          },
+        });
+        const data = await response.json();
+        setNotificationsCount(data.count);
+      } catch (error) {
+        console.error('Failed to fetch notifications count', error);
+      }
+    };
+
+    if (isLoggedIn) {
+      fetchNotificationsCount();
+    }
+  }, [isLoggedIn, user.jwt]);
+
+  
 
   const handleProfileMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -100,23 +197,23 @@ export default function NavBar() {
   };
 
   const handleLogout = async () => {
-         try {
-           console.log("MY JWT:" + user.jwt)
-          
-            await fetch('http://localhost:8080/tazma/api/auth/logout/'+ user.jwt, {
-             method: 'GET',
-             headers: {
-               'Content-Type': 'application/json',
-             },
-            
-           });
-           user.setJwt("");
-           user.setRole("");
-          
-         } catch (error) {
-           console.error('Logout Request Failed!!');
-         }
-    };
+    try {
+      console.log("MY JWT:" + user.jwt);
+
+      await fetch('http://localhost:8080/tazma/api/auth/logout/' + user.jwt, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+
+      });
+      user.setJwt("");
+      user.setRole("");
+
+    } catch (error) {
+      console.error('Logout Request Failed!!');
+    }
+  };
 
   const menuId = 'primary-search-account-menu';
   const renderMenu = (
@@ -158,12 +255,54 @@ export default function NavBar() {
       onClose={handleMobileMenuClose}
     >
       <MenuItem>
-        <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          <Badge badgeContent={4} color="error">
+        <IconButton size="large"
+        aria-label="show conversations"
+        color="inherit"
+        onClick={handleShowConversations}>
+          <Badge Badge badgeContent={showConversations.length} color="error">
             <MailIcon />
           </Badge>
         </IconButton>
         <p>Messages</p>
+
+        <Popper open={showConversations} anchorEl={conversationsRef.current} placement="bottom">
+        <ClickAwayListener onClickAway={() => setShowConversations(false)}>
+          <Paper sx={{ maxHeight: '300px', overflowY: 'auto' }}>
+            {conversations.map((chat) => (
+              <div key={chat.id} onClick={() => handleShowChat(chat)}>
+                <ListItem button>
+                  <ListItemAvatar>
+                    <Avatar alt={chat.recipientName} src={chat.recipientAvatar} />
+                  </ListItemAvatar>
+                  <ListItemText primary={chat.recipientName} secondary={chat.lastMessage} />
+                </ListItem>
+                <Divider />
+              </div>
+            ))}
+          </Paper>
+        </ClickAwayListener>
+      </Popper>
+
+      {/* Chat display */}
+      {showChat && selectedChat && (
+        <Box sx={{ position: 'fixed', bottom: '20px', right: '20px', zIndex: 1000 }}>
+          <Paper>
+            {/* Render your chat component here using selectedChat */}
+            <Box p={2}>
+              <Typography variant="h6">{selectedChat.recipientName}</Typography>
+              <Typography variant="body1">{selectedChat.lastMessage}</Typography>
+            </Box>
+            <Box p={1} display="flex" justifyContent="flex-end">
+              <IconButton onClick={handleMinimizeChat}>
+                <MinimizeIcon />
+              </IconButton>
+              <IconButton onClick={handleCloseChat}>
+                <CloseIcon />
+              </IconButton>
+            </Box>
+          </Paper>
+        </Box>
+      )}
       </MenuItem>
       <MenuItem>
         <IconButton
@@ -171,7 +310,7 @@ export default function NavBar() {
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge badgeContent={notificationsCount} color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -191,19 +330,18 @@ export default function NavBar() {
       </MenuItem>
       <MenuItem>
         <IconButton size="large"
-            color="inherit">
-          <LoginIcon/>
+          color="inherit">
+          <LoginIcon />
         </IconButton>
       </MenuItem>
     </Menu>
   );
 
-  if(!isLoggedIn){
+  if (!isLoggedIn) {
     return null;
   }
 
   return (
- 
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
@@ -245,7 +383,7 @@ export default function NavBar() {
               aria-label="show 17 new notifications"
               color="inherit"
             >
-              <Badge badgeContent={17} color="error">
+              <Badge badgeContent={notificationsCount} color="error">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
@@ -261,12 +399,11 @@ export default function NavBar() {
               <AccountCircle />
             </IconButton>
             <IconButton size="large"
-                        aria-controls={menuId}
-                        aria-haspopup="true"
-                        onClick={handleLogout}
-                        color="inherit">
-              <LogoutIcon/>
-    
+              aria-controls={menuId}
+              aria-haspopup="true"
+              onClick={handleLogout}
+              color="inherit">
+              <LogoutIcon />
             </IconButton>
           </Box>
           <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
