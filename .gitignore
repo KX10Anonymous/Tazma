@@ -51,5 +51,15 @@ tazma-mobile/amani/assets/
 ### React###
 tazma-web/node_modules/
 tazma-web/tazma/public/components/
+tazma-web/tazma/public/android-chrome-192x192.png
+tazma-web/tazma/public/android-chrome-512x512.png
+tazma-web/tazma/public/apple-touch-icon.png
+tazma-web/tazma/public/favicon-32x32.png
+tazma-web/tazma/public/favicon-16x16.png
+tazma-web/tazma/public/favicon.ico
+tazma-web/tazma/public/favicon1.ico
+tazma-web/tazma/public/logo192.png
+tazma-web/tazma/public/logo512.png
+tazma-web/tazma/public/robots.txt
 tazma-web/tazma/public/src/
 tazma-web/tazma/yarn.lock
