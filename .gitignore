@@ -38,11 +38,14 @@ src/main/resources/StyleResources
 .vscode/
 
 ### React Native ###
-tazma-mobile/node_modules/
-tazma-mobile/android/
+tazma-mobile/amani/node_modules/
+tazma-mobile/amani/android/
 tazma-mobile/ios/
+tazma-mobile/amani/yarn.lock
+tazma-mobile/amani/assets/
 
 ### React###
 tazma-web/node_modules/
 tazma-web/tazma/public/components/
 tazma-web/tazma/public/src/
+tazma-web/tazma/yarn.lock
